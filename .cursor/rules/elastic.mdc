@@ -31,14 +31,14 @@ If the intent is clear enough to pick a recipe, skip ahead to Step 2. If ambiguo
 
 ### Step 2: Understand Their Data
 
-Once you know the intent, ask about their data. One question: **"What does a typical record look like? For example, what fields does it have?"**
+Once you know the intent, ask about their data. Offer two options: **"Can you drop a sample of your data here — a few JSON records, a CSV snippet, or a database schema? Or if you'd prefer, just describe what a typical record looks like and I'll work from that."**
 
-Use the answer to determine:
+If they paste sample data, infer the field names, types, and structure directly — don't ask them to describe what you can already see. If they describe it, use their description.
+
+Use what you learn to determine:
 - What fields to map (text, keyword, numeric, nested)
 - Whether they need an embedding model and which one
 - Ingestion approach (bulk API, ingest pipeline, connector, streaming)
-
-If they provide enough detail, move on. If not, ask one follow-up (e.g., "Where does this data come from — a database, API, files?").
 
 ### Step 3: Check What Already Exists
 
