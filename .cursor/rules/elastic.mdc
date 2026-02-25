@@ -143,6 +143,53 @@ When generating Elasticsearch code:
 - **Cloud-ready** — Use `cloud_id` + `api_key` for connection. Include self-managed alternatives in comments. Always include the Getting Started section below so developers know where to find their credentials.
 - **Error handling** — Include basic error handling in ingestion (bulk API errors) and search (empty results, timeouts).
 - **Production patterns** — Use bulk API for ingestion (not single-doc indexing), connection pooling, and appropriate timeouts.
+- **Production-ready configuration** — All generated code must work beyond the sample data. See the section below on domain-specific configuration.
+
+## Domain-Specific Configuration
+
+Generated code must be production-ready, not just a demo that works for sample data. This applies to synonyms, analyzers, boosting weights, and any configuration that depends on the developer's actual domain.
+
+### Synonyms
+
+**Never hardcode synonyms inline in the mapping.** Inline synonyms require closing and reopening the index (or reindexing) every time you update them — that's unacceptable in production.
+
+Instead, use the **Elasticsearch Synonyms API**, which lets you update synonyms at any time without reindexing or downtime:
+
+1. Create a synonym set via the API:
+   ```
+   PUT _synonyms/my-product-synonyms
+   {
+     "synonyms_set": [
+       {"id": "boots", "synonyms": "boots, shoes, footwear"},
+       {"id": "hiking", "synonyms": "hiking, trekking, trail"}
+     ]
+   }
+   ```
+2. Reference it in the analyzer using `synonyms_set` (not `synonyms`):
+   ```json
+   "filter": {
+     "product_synonyms": {
+       "type": "synonym",
+       "synonyms_set": "my-product-synonyms",
+       "updateable": true
+     }
+   }
+   ```
+3. The synonym set can be updated at any time via `PUT _synonyms/my-product-synonyms` — no reindex needed.
+
+When generating synonyms, **ask the developer about their domain** rather than guessing from sample data. A few outdoor gear samples shouldn't produce a synonym list — the developer's actual product catalog should. If you don't have enough context, generate the code structure with an empty or minimal synonym set and include clear instructions on how to populate it:
+
+> The synonym set is where you teach Elasticsearch about your domain vocabulary. Right now it's a starter set — you'll want to expand this based on what your users actually search for. Common sources: search analytics (queries with zero results), customer support terminology, and industry-standard terms. You can update synonyms at any time via the Synonyms API without reindexing.
+
+### Other domain-specific settings
+
+Apply the same principle to all configuration that depends on the developer's data:
+
+- **Field boosts** (e.g., `name^3, tags^2`) — Present these as starting points and explain how to tune them based on click-through data, not as final values
+- **Edge n-gram ranges** — Explain the tradeoff (larger max_gram = more disk, faster prefix matching) and let the developer choose
+- **Completion suggester weights** — Explain what the weight controls and how to set it based on their business logic (popularity, recency, margin, etc.)
+
+**The goal:** every piece of generated code should work correctly when the developer swaps in their real data, not just for the sample record they pasted.
 
 ## Getting Started with Elastic Cloud
 
