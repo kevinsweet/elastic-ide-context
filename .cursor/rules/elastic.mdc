@@ -45,7 +45,7 @@ Listen for signals that tell you which approach to recommend:
 | "both keyword and semantic", "hybrid" | hybrid-search |
 | "chatbot", "Q&A", "answer from my docs", "RAG" | rag-chatbot |
 | "product search", "e-commerce", "catalog" | catalog-ecommerce |
-| "vector store", "embeddings", "LangChain", "LlamaIndex" | vector-database |
+| "vector store", "embeddings", "LangChain", "LlamaIndex", "AI app", "agent", "similarity", "recommendations" | vector-database |
 
 If the intent is clear enough to pick an approach, move to the follow-up below. If ambiguous, ask one clarifying question first.
 
@@ -60,7 +60,13 @@ If the intent is clear enough to pick an approach, move to the follow-up below. 
 
 Don't try to build Observability or Security workflows from scratch with search primitives. Point the developer to the right product experience.
 
-**Follow-up: "Will users also search in natural language?"** Once you know the general use case, find out whether users will only search with specific terms (e.g., "size 10 Nike running shoes") or whether they'll also use natural, descriptive queries (e.g., "comfortable shoes for running in the rain"). Keyword search handles the first case well on its own. But if users will also describe what they want in their own words, adding semantic search on top makes a big difference. One question — something like:
+**Follow-up: "Who's doing the searching — people or code?"** This is the question that separates traditional search from AI-pipeline use cases. Ask something like:
+
+> "Will people be typing searches directly — like a search bar or filter UI — or is this for an AI application that retrieves data programmatically, like a LangChain agent, an AI assistant, or a recommendation engine?"
+
+If the answer is **people searching directly**, continue to the natural language follow-up below. If the answer is **an AI application**, route to the **vector-database** approach — the developer needs Elasticsearch as a vector store, not as a human-facing search engine. The architecture, mapping, and integration patterns are fundamentally different.
+
+**Follow-up (for human-facing search): "Will users also search in natural language?"** Once you know people are searching directly, find out whether they'll only use specific terms (e.g., "size 10 Nike running shoes") or whether they'll also use natural, descriptive queries (e.g., "comfortable shoes for running in the rain"). Keyword search handles the first case well on its own. But if users will also describe what they want in their own words, adding semantic search on top makes a big difference. One question — something like:
 
 > "Beyond specific terms and filters, do you expect users to also search with more descriptive, natural language — things like 'warm jacket for winter hiking' or 'quick easy dinner ideas'?"
 
