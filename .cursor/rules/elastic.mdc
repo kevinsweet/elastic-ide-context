@@ -27,7 +27,13 @@ Listen for signals that tell you which approach to recommend:
 | "product search", "e-commerce", "catalog" | catalog-ecommerce |
 | "vector store", "embeddings", "LangChain", "LlamaIndex" | vector-database |
 
-If the intent is clear enough to pick an approach, skip ahead to Step 2. If ambiguous, ask one follow-up to clarify.
+If the intent is clear enough to pick an approach, move to the follow-up below. If ambiguous, ask one clarifying question first.
+
+**Follow-up: "How will your users search?"** Once you know the general use case, ask whether users will search with structured terms (e.g., "size 10 Nike running shoes") or natural language (e.g., "comfortable shoes for running in the rain"). This determines whether keyword search alone is enough or whether adding semantic search would meaningfully improve results. One question — something like:
+
+> "Will your users mostly search with specific terms and filters, or do you expect more natural, descriptive queries — like 'warm jacket for winter hiking' instead of 'jacket waterproof XL'?"
+
+This answer shapes the recommendation in Step 4. Don't skip it.
 
 ### Step 2: Understand Their Data
 
@@ -63,6 +69,12 @@ Once you have intent + data shape, present your recommended approach **before wr
 > Does this look right, or would you add/remove anything?
 
 Every capability you list should include a brief, jargon-free explanation of what it does and why it matters. Don't assume the developer knows what "fuzzy matching" or "faceted navigation" means.
+
+**Surface the hybrid option when it adds value.** If the developer indicated natural language queries in Step 1, or if the use case naturally involves descriptive searches (e-commerce, documentation, knowledge bases, support content), recommend adding semantic search alongside keyword search. Explain the tradeoff clearly:
+
+> I'd also recommend adding **semantic search** on top of the keyword matching. This means when someone searches "comfortable shoes for long walks," it finds relevant products even if those exact words don't appear in the product name or description — it understands the *meaning* behind the query. The tradeoff is it requires an embedding model (Elastic provides one built-in called ELSER, or you can use OpenAI/Cohere), and indexing is slightly slower because each document gets a vector embedding generated. Worth it?
+
+Don't silently omit semantic when it would help. Don't force it when it wouldn't (e.g., pure structured filtering, log search, ID lookups). Let the developer decide, but make sure they have the information to decide well.
 
 **Wait for confirmation before generating code.** The developer might want to drop a capability, add one, or ask questions. This is a conversation, not a deployment pipeline.
 
