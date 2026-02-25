@@ -99,33 +99,27 @@ When generating Elasticsearch code:
 
 ## Getting Started with Elastic Cloud
 
-When generated code includes a connection block, always include a **Getting Started** section that walks the developer through finding their credentials. Don't just say "set your cloud_id and api_key" — show them where to get them:
+When generated code includes a connection block, always include a **Getting Started** section that walks the developer through finding their credentials. Don't just say "set your cloud_id and api_key" — show them where to get them. The developer already has an Elasticsearch cluster (they accessed this from Kibana), so never suggest signing up for a trial.
 
-### No cluster yet
+### Finding your Cloud ID
 
-If the developer doesn't have Elasticsearch running yet, walk them through it:
+In Kibana, click the **help** icon (?) in the top nav, then **Connection details**. The Cloud ID is shown there. You can also find it at https://cloud.elastic.co → click your deployment → the Cloud ID is on the overview page.
 
-1. **Sign up** at https://cloud.elastic.co/registration (free 14-day trial, no credit card required)
-2. **Create a deployment** — the default settings work fine for development. Pick the cloud region closest to you.
-3. Once the deployment is ready, the **Cloud ID** is shown on the deployment overview page. Copy it.
-4. **Create an API key**: Go to **Management → Security → API keys** in Kibana (or use the Elasticsearch `POST /_security/api_key` endpoint). Copy the encoded key value.
+### Creating an API key
 
-### Existing cluster
+In Kibana, go to **Management → Security → API keys → Create API key**. Give it a name (e.g., `dev-key`) and create it. Copy the **Encoded** value — that's your `api_key`.
 
-If they already have a cluster:
+You can also create one via the REST API in Kibana Dev Tools (**Management → Dev Tools**):
+```
+POST /_security/api_key
+{"name": "dev-key", "expiration": "30d"}
+```
+Copy the `encoded` value from the response.
 
-- **Cloud ID**: Found at https://cloud.elastic.co → click your deployment → the Cloud ID is on the overview page
-- **API key**: In Kibana, go to **Management → Security → API keys → Create API key**. Or via the REST API:
-  ```
-  POST /_security/api_key
-  {"name": "dev-key", "expiration": "30d"}
-  ```
-  Copy the `encoded` value from the response — that's your `api_key`.
+### Self-managed clusters
 
-### Self-managed
-
-If they're running Elasticsearch locally or on their own infrastructure:
-- Replace `cloud_id`/`api_key` with `hosts=["http://localhost:9200"]` (and `basic_auth=("elastic", "password")` if security is enabled)
+If they're running Elasticsearch on their own infrastructure (not Elastic Cloud):
+- Replace `cloud_id`/`api_key` with `hosts=["https://your-elasticsearch-host:9200"]` (and `basic_auth=("elastic", "password")` if using basic auth)
 
 **Always include this context** in the Getting Started section of generated code. Never assume the developer knows where to find credentials.
 
