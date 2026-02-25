@@ -66,19 +66,48 @@ Every capability you list should include a brief, jargon-free explanation of wha
 
 **Wait for confirmation before generating code.** The developer might want to drop a capability, add one, or ask questions. This is a conversation, not a deployment pipeline.
 
-### Step 5: Build
+### Step 5: Walk Through the Mapping
 
-Once the developer confirms the plan, generate the complete implementation:
-1. Index mapping adapted to their data
+After the developer confirms the overall approach, present the proposed **index mapping** field by field. This is the most important step — the mapping is the foundation everything else builds on, and changing it later requires reindexing.
+
+For each field, explain:
+- **What type** you're assigning and why (e.g., `text` vs `keyword` vs `integer` vs `geo_point`)
+- **What it enables** (e.g., "this lets users filter by exact category without analysis overhead")
+- **Any special configuration** like sub-fields, custom analyzers, or completion suggesters — and what those do in plain language
+
+For example:
+
+> Here's how I'd map your data. Each field is set up for a specific job:
+>
+> | Field | Type | Why |
+> |-------|------|-----|
+> | `name` | text (3 sub-fields) | Main search field. Gets a **synonym analyzer** so "boots" and "shoes" match, an **autocomplete analyzer** for typeahead suggestions, and a **keyword** sub-field for exact sorting. |
+> | `description` | text | Searched alongside name but with lower relevance weight — helps with recall without dominating ranking. |
+> | `category` | keyword | Exact-match only — no analysis. Powers instant filtering and facet counts (e.g., "Footwear (42)"). |
+> | `price` | float | Enables range filters (min/max) and price-based sorting. |
+> | `stock_level` | integer | Lets you filter "in stock only" (`stock_level > 0`) and sort by availability. |
+> | `tags` | keyword (array) | Multi-value field for filtering and facets. Each product can have many tags. |
+> | `location` | geo_point | Enables "near me" distance queries and geo-sorting. |
+>
+> **One thing to know:** once data is indexed with this mapping, changing a field's type (e.g., from `text` to `keyword`) means you'll need to **reindex** — create a new index with the updated mapping, copy all documents over, and swap the alias. For small datasets this takes seconds; for millions of documents it can take minutes to hours depending on cluster size. It's not destructive (your data is safe), but it's something you want to get right upfront.
+>
+> Does this mapping look right for your data? Anything you'd add, remove, or change?
+
+**Wait for confirmation before generating code.** Mapping changes are the most expensive thing to fix later, so get this right first. If the developer wants changes, adjust the mapping and re-present it.
+
+### Step 6: Build
+
+Once the developer confirms the mapping, generate the complete implementation:
+1. Index mapping (exactly as confirmed)
 2. Ingestion script
 3. Search API endpoint with all confirmed capabilities
 4. Getting started instructions (see the credential walkthrough section below)
 
-Don't ask for permission to generate code at this point — they already confirmed. Just build it.
+Don't ask for permission to generate code at this point — they already confirmed both the approach and the mapping. Just build it.
 
-### Step 6: Iterate
+### Step 7: Iterate
 
-When the developer refines ("results aren't relevant enough," "add a category filter," "make it faster"), make targeted adjustments.
+When the developer refines ("results aren't relevant enough," "add a category filter," "make it faster"), make targeted adjustments. If a change requires a mapping update, flag that it will require reindexing and explain the process.
 
 ## Documentation
 
