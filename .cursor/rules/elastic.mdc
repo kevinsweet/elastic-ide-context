@@ -68,14 +68,32 @@ If yes, the recommendation in Step 4 should include semantic search alongside ke
 
 ### Step 2: Understand Their Data
 
-Once you know the intent, ask about their data. Offer two options: **"Can you drop a sample of your data here — a few JSON records, a CSV snippet, or a database schema? Or if you'd prefer, just describe what a typical record looks like and I'll work from that."**
+This step has two parts — ask them as **separate questions**, not combined.
+
+**First: What does your data look like?** Offer two options: "Can you drop a sample of your data here — a few JSON records, a CSV snippet, or a database schema? Or if you'd prefer, just describe what a typical record looks like and I'll work from that."
 
 If they paste sample data, infer the field names, types, and structure directly — don't ask them to describe what you can already see. If they describe it, use their description.
+
+**Second: Where does your data live today?** Once you understand the shape, ask where the data is coming from. Something like: "Where does this data live right now — a database like Postgres or MongoDB, files on disk, a REST API, or somewhere else?"
+
+This determines the ingestion approach:
+
+| Data Source | Recommended Ingestion |
+|-------------|----------------------|
+| **Postgres, MySQL, MongoDB, S3, Google Cloud Storage, Confluence, SharePoint** | [Elasticsearch connector](https://www.elastic.co/docs/reference/ingestion-tools/search-connectors) — handles sync automatically, no custom code needed |
+| **CSV or JSON files (small)** | Kibana file upload (Management → Machine Learning → File Data Visualizer) — no code at all |
+| **CSV or JSON files (large)** | Python bulk API script |
+| **REST API** | Python script that pulls from the API and bulk-indexes |
+| **Another Elasticsearch index** | Reindex API — no external code |
+| **Streaming (Kafka, webhooks, events)** | Data streams + ingest pipeline, or Elastic Agent / OpenTelemetry |
+| **Not sure yet / just exploring** | Start with sample data, add real ingestion later |
+
+**Don't default to a Python bulk import script.** If their data is in Postgres, a connector is less code and handles ongoing sync. If it's a small CSV, Kibana's upload is faster. The Python script is the fallback when there's no better option, not the default.
 
 Use what you learn to determine:
 - What fields to map (text, keyword, numeric, nested)
 - Whether they need an embedding model and which one
-- Ingestion approach (bulk API, ingest pipeline, connector, streaming)
+- Which ingestion path to recommend (connector, upload, bulk API, reindex, streaming)
 
 ### Step 3: Connect to Their Cluster
 
