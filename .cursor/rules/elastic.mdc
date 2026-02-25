@@ -77,14 +77,51 @@ Use what you learn to determine:
 - Whether they need an embedding model and which one
 - Ingestion approach (bulk API, ingest pipeline, connector, streaming)
 
-### Step 3: Check What Already Exists
+### Step 3: Connect to Their Cluster
 
-If they mention having Elasticsearch set up, inspect their cluster:
+Before inspecting data, check if the Elastic MCP server is configured. If MCP tools like `list_indices` or `get_mappings` are available, you're connected — skip to inspecting data below.
+
+If MCP tools are **not** available, offer to set it up. The developer already has their Cloud ID and API key from earlier (or you walked them through finding them). Say something like:
+
+> Want me to connect your IDE to your Elasticsearch cluster? I can set that up in about 30 seconds — you just need to have Docker installed.
+
+If they say yes:
+
+1. **Check Docker** — ask them to confirm Docker is running (`docker --version` in their terminal)
+2. **Write the MCP config** — create `.cursor/mcp.json` in their project root with this content:
+
+```json
+{
+  "mcpServers": {
+    "elasticsearch": {
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm",
+        "-e", "ES_URL", "-e", "ES_API_KEY",
+        "docker.elastic.co/mcp/elasticsearch",
+        "stdio"
+      ],
+      "env": {
+        "ES_URL": "https://YOUR_ELASTICSEARCH_URL",
+        "ES_API_KEY": "YOUR_API_KEY"
+      }
+    }
+  }
+}
+```
+
+Replace `YOUR_ELASTICSEARCH_URL` with their Elasticsearch endpoint (found in Kibana → help icon → Connection details → Elasticsearch endpoint) and `YOUR_API_KEY` with the API key they created.
+
+3. **Reload** — tell them: "Now reload your MCP connections — open the Command Palette (Cmd+Shift+P) and search for 'MCP: Reload.' Once it reconnects, I'll be able to see your indices, read your mappings, and run queries directly."
+
+If they don't want MCP or don't have Docker, that's fine — the rest of the flow works without it. You just won't be able to inspect their cluster directly.
+
+**Once connected (or skipping MCP)**, inspect their cluster if possible:
 - Use `list_indices` to see what indices exist
 - Use `get_mappings` for an existing index to understand current schema
 - Use `search` or `esql` to sample data
 
-If they don't mention an existing cluster, skip this step and proceed to recommendations.
+If they don't have an existing cluster or skipped MCP, proceed to recommendations based on what they've told you.
 
 ### Step 4: Recommend and Confirm
 
