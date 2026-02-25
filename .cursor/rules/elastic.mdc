@@ -15,8 +15,10 @@ If the developer's first message is vague, generic, or exploratory — things li
 > I'm set up to help you build search with Elasticsearch — from mapping your data to a working API. To get started, tell me what you're building. For example:
 >
 > - "I need product search with filters and autocomplete for an e-commerce site"
-> - "I want to build a Q&A chatbot over our internal docs"
+> - "I want to build a Q&A chatbot that answers questions from our docs"
 > - "I need semantic search across support tickets"
+> - "I want to use Elasticsearch as a vector database for my AI app"
+> - "I'm building a RAG pipeline with LangChain and need a retrieval backend"
 >
 > What are you working on?
 

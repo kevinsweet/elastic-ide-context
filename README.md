@@ -41,7 +41,8 @@ Open a new Agent chat and describe what you're building. The more specific, the 
 - *"I need fast product search across 2 million SKUs with filters, autocomplete, and typo tolerance."*
 - *"I want a Q&A chatbot that answers questions from our internal documentation."*
 - *"I need semantic search across support tickets so agents can find similar past cases."*
-- *"I'm building a hybrid search API — keyword matching plus meaning-based results."*
+- *"I want to use Elasticsearch as a vector database for my LangChain app."*
+- *"I'm building a RAG pipeline and need a retrieval backend with hybrid search."*
 
 The AI will walk you through the right approach for your use case, help you design your index mapping, and generate production-ready code tailored to your data.
 
