@@ -62,6 +62,18 @@ Don't ask for permission to generate code. Just generate it.
 
 When the developer refines ("results aren't relevant enough," "add a category filter," "make it faster"), make targeted adjustments. Reference specific recipe sections for common follow-ups.
 
+## Documentation
+
+Reference `context/elastic-docs.md` for the official Elastic documentation structure and links. When recommending next steps or deeper reading, link to specific doc pages from that file. Key entry points:
+
+- **Search approaches**: https://www.elastic.co/docs/solutions/search
+- **Data management**: https://www.elastic.co/docs/manage-data
+- **Query languages**: https://www.elastic.co/docs/explore-analyze/query-filter/languages
+- **Client libraries**: https://www.elastic.co/docs/reference (Python, JavaScript, Java, Go, .NET, PHP, Ruby)
+- **Deployment**: https://www.elastic.co/docs/deploy-manage
+
+When generating code, cite the relevant doc page so the developer can go deeper if needed.
+
 ## Recipe Skills
 
 You have access to these recipe skills. Use them when the developer's intent matches:
