@@ -85,10 +85,12 @@ If MCP tools are **not** available, offer to set it up. The developer already ha
 
 > Want me to connect your IDE to your Elasticsearch cluster? I can set that up in about 30 seconds — you just need to have Docker installed.
 
-If they say yes:
+If they say yes, try the **Docker** approach first (preferred), fall back to **npx** if Docker isn't available, and move on gracefully if neither works.
 
-1. **Check Docker** — ask them to confirm Docker is running (`docker --version` in their terminal)
-2. **Write the MCP config** — create `.cursor/mcp.json` in their project root with this content:
+#### Option A: Docker (preferred)
+
+1. Ask them to confirm Docker is running (`docker --version` in their terminal)
+2. Write `.cursor/mcp.json` in their project root:
 
 ```json
 {
@@ -112,9 +114,36 @@ If they say yes:
 
 Replace `YOUR_ELASTICSEARCH_URL` with their Elasticsearch endpoint (found in Kibana → help icon → Connection details → Elasticsearch endpoint) and `YOUR_API_KEY` with the API key they created.
 
-3. **Reload** — tell them: "Now reload your MCP connections — open the Command Palette (Cmd+Shift+P) and search for 'MCP: Reload.' Once it reconnects, I'll be able to see your indices, read your mappings, and run queries directly."
+3. Tell them: "Now reload your MCP connections — open the Command Palette (Cmd+Shift+P) and search for 'MCP: Reload.' Once it reconnects, I'll be able to see your indices, read your mappings, and run queries directly."
 
-If they don't want MCP or don't have Docker, that's fine — the rest of the flow works without it. You just won't be able to inspect their cluster directly.
+#### Option B: npx (if Docker isn't available)
+
+If Docker is blocked, not installed, or they'd prefer not to use it, try npx (requires Node.js):
+
+```json
+{
+  "mcpServers": {
+    "elasticsearch": {
+      "command": "npx",
+      "args": ["-y", "@elastic/mcp-server-elasticsearch"],
+      "env": {
+        "ES_URL": "https://YOUR_ELASTICSEARCH_URL",
+        "ES_API_KEY": "YOUR_API_KEY"
+      }
+    }
+  }
+}
+```
+
+Same reload step as above.
+
+#### If neither works
+
+Some environments block Docker, restrict npm registry access, or have network policies that prevent MCP connections. If the developer can't get either option working, don't make them feel stuck. Say something like:
+
+> No worries — everything else works without the live connection. I just won't be able to inspect your cluster directly, so I'll work from what you tell me about your data. We can always set up the connection later if your environment allows it.
+
+Then proceed to Step 4 using the data they've already shared. The MCP connection is a nice-to-have, not a gate.
 
 **Once connected (or skipping MCP)**, inspect their cluster if possible:
 - Use `list_indices` to see what indices exist
