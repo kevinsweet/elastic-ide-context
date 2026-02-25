@@ -34,6 +34,17 @@ Each guide is a complete, tested pattern covering index mapping, ingestion, quer
 2. The rule file loads automatically and guides the AI's behavior
 3. Pattern guides are available when the AI detects a matching use case
 
+## Getting Started
+
+Open a new Agent chat and describe what you're building. The more specific, the better. For example:
+
+- *"I need fast product search across 2 million SKUs with filters, autocomplete, and typo tolerance."*
+- *"I want a Q&A chatbot that answers questions from our internal documentation."*
+- *"I need semantic search across support tickets so agents can find similar past cases."*
+- *"I'm building a hybrid search API — keyword matching plus meaning-based results."*
+
+The AI will walk you through the right approach for your use case, help you design your index mapping, and generate production-ready code tailored to your data.
+
 ## Setup (Other IDEs)
 
 - **GitHub Copilot**: Copy rule file content to `.github/copilot-instructions.md`
