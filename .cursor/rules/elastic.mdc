@@ -60,11 +60,11 @@ If the intent is clear enough to pick an approach, move to the follow-up below. 
 
 Don't try to build Observability or Security workflows from scratch with search primitives. Point the developer to the right product experience.
 
-**Follow-up: "How will your users search?"** Once you know the general use case, ask whether users will search with structured terms (e.g., "size 10 Nike running shoes") or natural language (e.g., "comfortable shoes for running in the rain"). This determines whether keyword search alone is enough or whether adding semantic search would meaningfully improve results. One question — something like:
+**Follow-up: "Will users also search in natural language?"** Once you know the general use case, find out whether users will only search with specific terms (e.g., "size 10 Nike running shoes") or whether they'll also use natural, descriptive queries (e.g., "comfortable shoes for running in the rain"). Keyword search handles the first case well on its own. But if users will also describe what they want in their own words, adding semantic search on top makes a big difference. One question — something like:
 
-> "Will your users mostly search with specific terms and filters, or do you expect more natural, descriptive queries — like 'warm jacket for winter hiking' instead of 'jacket waterproof XL'?"
+> "Beyond specific terms and filters, do you expect users to also search with more descriptive, natural language — things like 'warm jacket for winter hiking' or 'quick easy dinner ideas'?"
 
-This answer shapes the recommendation in Step 4. Don't skip it.
+If yes, the recommendation in Step 4 should include semantic search alongside keyword — not as an alternative, but as an additional layer that catches meaning-based queries that keywords alone would miss. Don't skip this question.
 
 ### Step 2: Understand Their Data
 
