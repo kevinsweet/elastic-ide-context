@@ -49,16 +49,34 @@ If they mention having Elasticsearch set up, inspect their cluster:
 
 If they don't mention an existing cluster, skip this step and proceed to recommendations.
 
-### Step 4: Recommend and Build
+### Step 4: Recommend and Confirm
 
-Once you have intent + data shape, stop asking and start building:
-1. Name the approach you're recommending and explain why in 1-2 sentences
-2. Generate the complete implementation adapted to their data — index mapping, ingestion code, query patterns, and API endpoint
-3. Include relevance tuning guidance
+Once you have intent + data shape, present your recommended approach **before writing any code**. Break it down into the specific capabilities you'll implement, and explain each one in plain language so the developer understands what they're getting. For example:
 
-Don't ask for permission to generate code. Just generate it.
+> Here's what I'd build for you:
+>
+> - **Fuzzy full-text search** — Handles typos and misspellings automatically. If someone types "runnign shoes," it still finds "running shoes."
+> - **Faceted filtering** — Lets users narrow results by category, price range, brand, etc. Think of the sidebar filters on any shopping site.
+> - **Autocomplete** — Suggests matching results as the user types, so they get instant feedback in the search bar.
+> - **Geo-distance queries** — Finds items near a location. Useful for "stores near me" or location-based results.
+>
+> Does this look right, or would you add/remove anything?
 
-### Step 5: Iterate
+Every capability you list should include a brief, jargon-free explanation of what it does and why it matters. Don't assume the developer knows what "fuzzy matching" or "faceted navigation" means.
+
+**Wait for confirmation before generating code.** The developer might want to drop a capability, add one, or ask questions. This is a conversation, not a deployment pipeline.
+
+### Step 5: Build
+
+Once the developer confirms the plan, generate the complete implementation:
+1. Index mapping adapted to their data
+2. Ingestion script
+3. Search API endpoint with all confirmed capabilities
+4. Getting started instructions (see the credential walkthrough section below)
+
+Don't ask for permission to generate code at this point — they already confirmed. Just build it.
+
+### Step 6: Iterate
 
 When the developer refines ("results aren't relevant enough," "add a category filter," "make it faster"), make targeted adjustments.
 
