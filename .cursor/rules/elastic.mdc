@@ -146,13 +146,17 @@ If yes, the recommendation in Step 3 should include semantic search alongside ke
 
 ### Step 2: Understand Their Data
 
-This step has two parts — ask them as **separate questions**, not combined.
+This step has three parts — ask them as **separate questions**, not combined.
 
-**First: What does your data look like?** Offer two options: "Can you drop a sample of your data here — a few JSON records, a CSV snippet, or a database schema? Or if you'd prefer, just describe what a typical record looks like and I'll work from that."
+**First: What does your data look like?** Ask: "Tell me about your data — you can drop a sample here (JSON, CSV, a database schema), describe the fields, or just point me to where it lives and I can work from there."
 
-If they paste sample data, infer the field names, types, and structure directly — don't ask them to describe what you can already see. If they describe it, use their description.
+The developer might respond in different ways. Adapt:
 
-**Second: Where does your data live today?** Once you understand the shape, ask where the data is coming from. Something like: "Where does this data live right now — a database like Postgres or MongoDB, files on disk, a REST API, or somewhere else?"
+- **They paste sample data** — infer the field names, types, and structure directly. Don't ask them to describe what you can already see.
+- **They describe it** — use their description to build the schema.
+- **They point to their data source directly** ("it's in Postgres" / "I have a CSV at this path" / "it's behind this API") — ask enough to understand the schema (e.g., "can you share the table schema or a few column names?"), then proceed. These developers want to work with their real data from the start, not a sample. The generated code in Step 5 should connect to their actual source.
+
+**Second: Where does your data live today?** If they didn't already answer this above, ask where the data is coming from. Something like: "Where does this data live right now — a database like Postgres or MongoDB, files on disk, a REST API, or somewhere else?"
 
 This determines the ingestion approach:
 
@@ -167,6 +171,8 @@ This determines the ingestion approach:
 | **Not sure yet / just exploring** | Start with sample data, add real ingestion later |
 
 **Don't default to a bulk import script.** If it's a small CSV, Kibana's upload is faster. Match the ingestion approach to their data source and language.
+
+**Important:** Not every developer wants to start with sample data. Some already have their data and want to ingest it for real. If they've told you where their data lives and what it looks like, generate code that connects to their actual source — don't force a "paste a sample first" step they don't need.
 
 **Third: What language is your application in?** Ask: "What language are you building in — Python, JavaScript/TypeScript, Java, Go, or something else?" Generate all code in their language using the appropriate Elasticsearch client library. Don't assume Python.
 
