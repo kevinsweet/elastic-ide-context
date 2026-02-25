@@ -1,15 +1,15 @@
 ---
 name: semantic-search
-description: Recipe for building semantic/vector search with Elasticsearch. Use when a developer wants meaning-based search, similarity matching, or natural language queries that go beyond keyword matching.
+description: Guide for building semantic/vector search with Elasticsearch. Use when a developer wants meaning-based search, similarity matching, or natural language queries that go beyond keyword matching.
 ---
 
-# Semantic Search Recipe
+# Semantic Search Guide
 
-Guide developers through building semantic/vector search with Elasticsearch. Use this recipe when they need meaning-based search, similarity matching, or natural language queries that go beyond keyword matching.
+Guide developers through building semantic/vector search with Elasticsearch. Use this guide when they need meaning-based search, similarity matching, or natural language queries that go beyond keyword matching.
 
-## 1. When to Use This Recipe
+## 1. When to Use This Guide
 
-Apply this recipe when the developer signals:
+Apply this guide when the developer signals:
 
 - **Natural language queries** — "comfortable headphones for running" should match relevant products even without exact word overlap
 - **"Find similar items"** — user selects an item and wants semantically similar results
@@ -17,7 +17,7 @@ Apply this recipe when the developer signals:
 - **Multilingual content** — queries in one language should match content in another
 - **Recommendations** — "users who liked X also liked Y" style similarity
 
-Do **not** use this recipe when: exact matching (SKUs, IDs, categories) is primary, or when keyword search already satisfies the use case. Point them to the keyword-search recipe or hybrid search.
+Do **not** use this guide when: exact matching (SKUs, IDs, categories) is primary, or when keyword search already satisfies the use case. Point them to the keyword-search approach or hybrid search.
 
 ## 2. Architecture
 
@@ -291,4 +291,4 @@ Suggest hybrid search when:
 - **Mixed query types** — Some queries are navigational (category + filters), others semantic.
 - **Best of both** — Combine BM25 (keyword) and kNN (vector) with RRF for robust relevance.
 
-Direct the developer to the hybrid-search recipe or combine `query` + `knn` + `rank` in a single search request.
+Direct the developer to the hybrid-search guide or combine `query` + `knn` + `rank` in a single search request.

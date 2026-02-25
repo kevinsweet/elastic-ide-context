@@ -1,15 +1,15 @@
 ---
 name: rag-chatbot
-description: Recipe for building RAG (retrieval-augmented generation) chatbots and Q&A systems with Elasticsearch. Use when a developer wants to build a chatbot, Q&A system, or AI assistant that answers questions from their own data.
+description: Guide for building RAG (retrieval-augmented generation) chatbots and Q&A systems with Elasticsearch. Use when a developer wants to build a chatbot, Q&A system, or AI assistant that answers questions from their own data.
 ---
 
-# RAG / Chatbot Recipe
+# RAG / Chatbot Guide
 
-Guide developers through building retrieval-augmented generation (RAG) systems with Elasticsearch as the retrieval backend. Use this recipe when they want a chatbot, Q&A interface, or AI assistant that answers from their own documents.
+Guide developers through building retrieval-augmented generation (RAG) systems with Elasticsearch as the retrieval backend. Use this guide when they want a chatbot, Q&A interface, or AI assistant that answers from their own documents.
 
-## 1. When to Use This Recipe
+## 1. When to Use This Guide
 
-Apply this recipe when the developer signals:
+Apply this guide when the developer signals:
 
 - **"Build a chatbot"** — over docs, knowledge base, support articles, internal wiki
 - **"Q&A over my data"** — ask questions and get answers grounded in their documents
@@ -17,7 +17,7 @@ Apply this recipe when the developer signals:
 - **"Answer from my docs"** — don't hallucinate, cite sources
 - **"RAG pipeline"** — they already know the pattern and want Elasticsearch as the retriever
 
-Do **not** use this recipe when: the developer only needs search results (not generated answers) — point them to keyword, semantic, or hybrid search recipes instead.
+Do **not** use this guide when: the developer only needs search results (not generated answers) — point them to keyword, semantic, or hybrid search instead.
 
 ## 2. Architecture
 

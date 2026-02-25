@@ -1,15 +1,15 @@
 ---
 name: keyword-search
-description: Recipe for building keyword/full-text search with Elasticsearch. Use when a developer wants text matching, filters, faceted search, autocomplete, or traditional search functionality.
+description: Guide for building keyword/full-text search with Elasticsearch. Use when a developer wants text matching, filters, faceted search, autocomplete, or traditional search functionality.
 ---
 
-# Keyword Search Recipe
+# Keyword Search Guide
 
-Guide developers through building full-text keyword search with Elasticsearch. Use this recipe when they need text matching, filters, faceting, autocomplete, or traditional search-bar behavior.
+Guide developers through building full-text keyword search with Elasticsearch. Use this guide when they need text matching, filters, faceting, autocomplete, or traditional search-bar behavior.
 
-## 1. When to Use This Recipe
+## 1. When to Use This Guide
 
-Apply this recipe when the developer signals:
+Apply this guide when the developer signals:
 
 - **Structured data** — products, articles, documents with known fields (title, description, category, price)
 - **Exact matching matters** — SKUs, IDs, categories, status values must match precisely
@@ -18,7 +18,7 @@ Apply this recipe when the developer signals:
 - **Autocomplete / typeahead** — suggest completions as user types
 - **No semantic intent** — "red shoes" should match documents containing "red" and "shoes", not "crimson sneakers"
 
-Do **not** use this recipe when: natural language queries return poor results, user expects meaning-based matching, or multilingual semantic similarity is needed. Point them to the semantic-search recipe instead.
+Do **not** use this guide when: natural language queries return poor results, user expects meaning-based matching, or multilingual semantic similarity is needed. Point them to the semantic-search approach instead.
 
 ## 2. Index Mapping
 
@@ -340,4 +340,4 @@ Suggest hybrid or semantic search when:
 - **"Find similar"** — user wants items similar to a selected item, not just keyword overlap.
 - **Synonyms and paraphrasing** — synonym lists are too large or maintenance-heavy.
 
-Direct the developer to the semantic-search recipe for vector search, or to hybrid search (combining keyword + vector with RRF).
+Direct the developer to the semantic-search guide for vector search, or to hybrid search (combining keyword + vector with RRF).

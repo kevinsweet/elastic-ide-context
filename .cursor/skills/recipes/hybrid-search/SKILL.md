@@ -1,19 +1,19 @@
 ---
 name: hybrid-search
-description: Recipe for building hybrid search combining keyword (BM25) and vector (semantic) retrieval with Elasticsearch. Use when a developer needs both exact text matching AND meaning-based search — the best of both worlds.
+description: Guide for building hybrid search combining keyword (BM25) and vector (semantic) retrieval with Elasticsearch. Use when a developer needs both exact text matching AND meaning-based search — the best of both worlds.
 ---
 
-# Hybrid Search Recipe
+# Hybrid Search Guide
 
 Guide developers through building hybrid search in Elasticsearch: combining BM25 keyword retrieval with kNN vector retrieval via Reciprocal Rank Fusion (RRF).
 
-## When to Use This Recipe
+## When to Use This Guide
 
-Apply this recipe when:
+Apply this guide when:
 
 - **Users search with both keywords AND natural language** — e.g., "elasticsearch index mapping" vs "how do I define how documents are stored"
 - **Need exact matches for some queries but semantic understanding for others** — product names, codes, IDs vs natural language
-- **Use cases**: recipe apps, documentation search, product search with natural queries, e-commerce search, knowledge bases
+- **Use cases**: documentation search, product search with natural queries, e-commerce search, knowledge bases
 
 ## Architecture
 

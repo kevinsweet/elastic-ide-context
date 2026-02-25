@@ -1,15 +1,15 @@
 ---
 name: catalog-ecommerce
-description: Recipe for building catalog and e-commerce search with Elasticsearch. Use when a developer wants product search, faceted navigation, autocomplete, "did you mean" suggestions, or shopping-oriented search experiences.
+description: Guide for building catalog and e-commerce search with Elasticsearch. Use when a developer wants product search, faceted navigation, autocomplete, "did you mean" suggestions, or shopping-oriented search experiences.
 ---
 
-# Catalog / E-Commerce Search Recipe
+# Catalog / E-Commerce Search Guide
 
-Guide developers through building product catalog and e-commerce search with Elasticsearch. Use this recipe when they need product search with filtering, faceting, autocomplete, boosting by attributes, and shopping-oriented relevance.
+Guide developers through building product catalog and e-commerce search with Elasticsearch. Use this guide when they need product search with filtering, faceting, autocomplete, boosting by attributes, and shopping-oriented relevance.
 
-## 1. When to Use This Recipe
+## 1. When to Use This Guide
 
-Apply this recipe when the developer signals:
+Apply this guide when the developer signals:
 
 - **Product search** — search across a product catalog with titles, descriptions, categories
 - **Faceted navigation** — filter by brand, category, price range, rating, with counts
@@ -18,7 +18,7 @@ Apply this recipe when the developer signals:
 - **Merchandising / boosting** — promote certain products (new arrivals, on sale, high margin)
 - **Multi-attribute filtering** — size, color, availability, shipping options
 
-Do **not** use this recipe when: the developer only needs document search without structured attributes — point them to keyword or hybrid search. If they need meaning-based "find similar products," combine this with the semantic-search recipe.
+Do **not** use this guide when: the developer only needs document search without structured attributes — point them to keyword or hybrid search. If they need meaning-based "find similar products," combine this with the semantic-search approach.
 
 ## 2. Index Mapping
 
@@ -496,6 +496,6 @@ def autocomplete():
 
 ## 8. When to Upgrade
 
-- **Semantic product search** — When "comfortable headphones for running" should match even without exact keyword overlap. Add the semantic-search recipe's vector field to this index.
-- **Hybrid** — Combine keyword + semantic for the best of both. Use the hybrid-search recipe.
+- **Semantic product search** — When "comfortable headphones for running" should match even without exact keyword overlap. Add a vector field using the semantic-search approach.
+- **Hybrid** — Combine keyword + semantic for the best of both. See the hybrid-search guide.
 - **Personalization** — Boost results based on user behavior (clicks, purchases). Requires a signals index and custom scoring.

@@ -15,12 +15,12 @@ Use-case-aware developer context for AI-native IDEs. Turns your AI coding assist
 5. Guide you through ingestion and implementation
 6. Iterate based on your feedback
 
-### Use-Case Recipes
+### Search Pattern Guides
 
-Each recipe is a complete, tested pattern covering index mapping, ingestion, query patterns, API endpoint, and relevance tuning.
+Each guide is a complete, tested pattern covering index mapping, ingestion, query patterns, API endpoint, and relevance tuning.
 
-| Recipe | Use Case |
-|--------|----------|
+| Pattern | Use Case |
+|---------|----------|
 | **keyword-search** | Full-text search, filters, facets, autocomplete, typo tolerance |
 | **semantic-search** | Vector/embedding-based search, kNN, meaning-based matching |
 | **hybrid-search** | BM25 + kNN combined with Reciprocal Rank Fusion (RRF) |
@@ -32,7 +32,7 @@ Each recipe is a complete, tested pattern covering index mapping, ingestion, que
 
 1. Copy `.cursor/` into your project root
 2. The rule file loads automatically and guides the AI's behavior
-3. Recipe skills are available when the AI detects a matching use case
+3. Pattern guides are available when the AI detects a matching use case
 
 ## Setup (Other IDEs)
 
@@ -44,5 +44,5 @@ Each recipe is a complete, tested pattern covering index mapping, ingestion, que
 This follows a three-layer architecture:
 
 1. **Orchestrator** (rule file) — Lightweight playbook that drives the conversation flow
-2. **Recipes** (skill files) — Pre-built, tested knowledge bundles for each search pattern
+2. **Pattern guides** (skill files) — Pre-built, tested knowledge for each search pattern
 3. **Live data** (MCP server) — Connect to your Elasticsearch cluster for real-time schema inspection and queries (requires [Elastic MCP server](https://github.com/elastic/elasticsearch-mcp-server))

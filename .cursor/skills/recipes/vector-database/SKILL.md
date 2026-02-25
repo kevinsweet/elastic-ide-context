@@ -1,13 +1,13 @@
 ---
 name: vector-database
-description: Recipe for using Elasticsearch as a vector database for AI applications. Use when a developer wants to store and retrieve embeddings, integrate with LangChain/LlamaIndex, build similarity search, or use Elasticsearch as a vector store for their AI pipeline.
+description: Guide for using Elasticsearch as a vector database for AI applications. Use when a developer wants to store and retrieve embeddings, integrate with LangChain/LlamaIndex, build similarity search, or use Elasticsearch as a vector store for their AI pipeline.
 ---
 
-# Elasticsearch as a Vector Database (Recipe)
+# Elasticsearch as a Vector Database
 
-## When to Use This Recipe
+## When to Use This Guide
 
-Use this recipe when the developer signals any of the following:
+Use this guide when the developer signals any of the following:
 
 - **Framework integration**: LangChain, LlamaIndex, semantic search, RAG (retrieval-augmented generation)
 - **Storage terms**: "vector store", "store embeddings", "embedding storage", "vector index"
