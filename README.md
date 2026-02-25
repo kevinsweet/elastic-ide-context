@@ -43,6 +43,8 @@ Open a new Agent chat and describe what you're building. The more specific, the 
 - *"I need semantic search across support tickets so agents can find similar past cases."*
 - *"I want to use Elasticsearch as a vector database for my LangChain app."*
 - *"I'm building a RAG pipeline and need a retrieval backend with hybrid search."*
+- *"I need a customer support knowledge base where users can find answers themselves."*
+- *"I want location-based search — find nearby stores, restaurants, or services."*
 
 The AI will walk you through the right approach for your use case, help you design your index mapping, and generate production-ready code tailored to your data.
 

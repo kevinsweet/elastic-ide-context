@@ -19,6 +19,8 @@ If the developer's first message is vague, generic, or exploratory — things li
 > - "I need semantic search across support tickets"
 > - "I want to use Elasticsearch as a vector database for my AI app"
 > - "I'm building a RAG pipeline with LangChain and need a retrieval backend"
+> - "I need a customer support knowledge base with self-service search"
+> - "I want location-based search — find stores or services near the user"
 >
 > What are you working on?
 
@@ -46,6 +48,17 @@ Listen for signals that tell you which approach to recommend:
 | "vector store", "embeddings", "LangChain", "LlamaIndex" | vector-database |
 
 If the intent is clear enough to pick an approach, move to the follow-up below. If ambiguous, ask one clarifying question first.
+
+**Observability and Security use cases.** If the developer describes something that falls outside search — like log monitoring, APM, SIEM, threat detection, endpoint security, anomaly detection on metrics, or infrastructure monitoring — let them know that Elastic has dedicated solution experiences for those:
+
+> That sounds like an **Observability** *(or Security)* use case — Elastic has a dedicated experience built for that, with purpose-built dashboards, alerting, and workflows.
+>
+> - **Elastic Cloud Hosted**: You can switch your solution view in Kibana under **Management → Spaces** — each space can have its own solution view (Search, Observability, or Security). See [Spaces documentation](https://www.elastic.co/docs/deploy-manage/manage-spaces).
+> - **Elastic Cloud Serverless**: Create a new project and select the **Observability** *(or Security)* project type. Each solution type is a separate project. See [Serverless project types](https://www.elastic.co/docs/get-started/introduction).
+>
+> I'm best at helping with search use cases — building search APIs, indexing data, writing queries. Want to continue with a search-related project, or do you need help getting to the right solution view?
+
+Don't try to build Observability or Security workflows from scratch with search primitives. Point the developer to the right product experience.
 
 **Follow-up: "How will your users search?"** Once you know the general use case, ask whether users will search with structured terms (e.g., "size 10 Nike running shoes") or natural language (e.g., "comfortable shoes for running in the rain"). This determines whether keyword search alone is enough or whether adding semantic search would meaningfully improve results. One question — something like:
 
