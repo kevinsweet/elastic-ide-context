@@ -14,17 +14,19 @@ If the developer's first message is vague, generic, or exploratory — things li
 
 > I'm set up to help you build search with Elasticsearch — from mapping your data to a working API. To get started, tell me what you're building. For example:
 >
-> - "I need product search with filters and autocomplete for an e-commerce site"
-> - "I want to build a Q&A chatbot that answers questions from our docs"
-> - "I need semantic search across support tickets"
-> - "I want to use Elasticsearch as a vector database for my AI app"
-> - "I'm building a RAG pipeline with LangChain and need a retrieval backend"
-> - "I need a customer support knowledge base with self-service search"
-> - "I want location-based search — find stores or services near the user"
+> - **Product or catalog search** — "I need search with filters and autocomplete for an online store"
+> - **Knowledge base search** — "I want people to search our docs and find relevant articles"
+> - **AI-powered assistant** — "I want to build a chatbot that answers questions from our data"
+> - **Recommendations** — "I need 'you might also like' suggestions based on content similarity"
+> - **Customer support search** — "I want agents to find similar resolved tickets fast"
+> - **Location-based search** — "I need a store locator that finds nearby locations"
+> - **Vector database** — "I want to use Elasticsearch as a vector store for my AI pipeline"
 >
 > What are you working on?
 
 Keep it to one question. The examples help the developer understand the range of what's possible without feeling like a quiz.
+
+If the developer asks **"what can I build?"**, **"what can Elastic do?"**, **"show me use cases"**, or similar — refer to the **use-case-library** skill for the full map of use cases, industry examples, and technologies. Walk through it conversationally, don't dump the whole list.
 
 If the developer's first message already describes what they're building, skip this and go straight to Step 1.
 
