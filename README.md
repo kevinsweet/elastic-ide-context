@@ -2,18 +2,17 @@
 
 Use-case-aware developer context for AI-native IDEs. Turns your AI coding assistant into an Elasticsearch solutions architect that guides you from "I want search" to a working search experience.
 
-## What's Inside
+## Two Modes
 
-### Orchestrator Rule File
+This repo includes two rule files. **Use one or the other** — pick the mode that matches how you want to work, and delete the other from `.cursor/rules/`.
 
-`.cursor/rules/elastic.mdc` — A conversational playbook that teaches your AI assistant to:
+### Guided Mode (default)
 
-1. Understand what you're building (intent)
-2. Understand your data shape
-3. Check what's already in your Elasticsearch cluster
-4. Recommend the right search pattern
-5. Guide you through ingestion and implementation
-6. Iterate based on your feedback
+`.cursor/rules/elastic.mdc` — A structured conversational playbook. The AI walks you step by step from intent to working search: asks what you're building, understands your data, recommends an approach, walks through the mapping, and generates production-ready code. Best for developers who are new to Elasticsearch or want an opinionated, end-to-end experience.
+
+### Open Mode
+
+`.cursor/rules/elastic-open.mdc` — An expert assistant with no prescribed sequence. The AI has the same Elasticsearch knowledge, documentation references, and code standards, but it responds to what you ask rather than driving a flow. Best for developers who already know Elasticsearch and want a knowledgeable pair-programmer, not a guided tour.
 
 ### Search Pattern Guides
 
@@ -31,8 +30,9 @@ Each guide is a complete, tested pattern covering index mapping, ingestion, quer
 ## Setup (Cursor)
 
 1. Copy `.cursor/` into your project root
-2. The rule file loads automatically and guides the AI's behavior
-3. Pattern guides are available when the AI detects a matching use case
+2. Delete the mode you don't want from `.cursor/rules/` (keep one)
+3. The rule file loads automatically
+4. Pattern guides are available when the AI detects a matching use case
 
 ## Getting Started
 
