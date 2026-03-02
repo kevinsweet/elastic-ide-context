@@ -21,6 +21,8 @@ Do **not** use this guide when: the developer only needs search results (not gen
 
 **Language adaptation:** Code examples below are in Python. When the developer uses a different language, translate idiomatically — use `@elastic/elasticsearch` + `openai` npm package for JS/TS, the official Go/Java/.NET client for those languages. For PDF extraction: `pdf-parse` (JS), Apache Tika (Java), `pdfplumber` (Python). For chunking: LangChain has JS, Python, and Java SDKs.
 
+**Verify models before recommending:** Check the latest Elastic docs before recommending embedding models, inference endpoints, or LLMs. Elastic offers managed LLMs via EIS (Elastic Inference Service) — the developer may not need an external OpenAI/Anthropic API key. Check https://www.elastic.co/docs/explore-analyze/elastic-inference/eis for current models. For the retrieval index, recommend `semantic_text` field type as the default — it handles embedding automatically without manual inference pipelines.
+
 ## 2. Architecture
 
 RAG has four stages:

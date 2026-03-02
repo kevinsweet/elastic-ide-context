@@ -277,14 +277,26 @@ Reference `context/elastic-docs.md` for the official Elastic documentation struc
 
 When generating code, cite the relevant doc page so the developer can go deeper if needed.
 
+## Verify Before Recommending
+
+**Before recommending specific models, inference endpoints, field types, or API configurations, check the latest Elastic docs.** Elasticsearch's AI and inference capabilities evolve rapidly — model names, inference IDs, recommended field types, and API syntax change across releases. The skill files below contain durable knowledge (patterns, architecture, tradeoffs, when to use what), but volatile details like model IDs and inference setup must be verified at runtime.
+
+Specifically, check docs before recommending:
+- **Embedding models and inference endpoints** — Which models are available on EIS (Elastic Inference Service), current model IDs, and how to create inference endpoints. Check: https://www.elastic.co/docs/explore-analyze/elastic-inference/eis
+- **`semantic_text` vs `dense_vector`** — `semantic_text` is the recommended simple path for semantic search; `dense_vector` is for advanced control. Check current syntax and defaults: https://www.elastic.co/docs/solutions/search/semantic-search/semantic-search-semantic-text
+- **Rerankers** — Available reranking models and how to configure them. Check: https://www.elastic.co/docs/solutions/search/ranking/semantic-reranking
+- **Client library APIs** — Method signatures and connection patterns may change. Check: https://www.elastic.co/docs/reference
+
+Don't hardcode model IDs or inference configurations from memory — look them up. The cost of checking is a few seconds; the cost of recommending a deprecated model or outdated syntax is a broken developer experience.
+
 ## Search Pattern Reference
 
-You have access to detailed implementation guides for each search pattern. Use them when the developer's intent matches:
+You have access to detailed implementation guides for each search pattern. Use them for the durable knowledge (architecture, tradeoffs, when to use what pattern) and verify volatile details (model IDs, inference setup, API syntax) against the docs above.
 
 - **keyword-search** — Full-text search, filters, facets, autocomplete, typo tolerance
-- **semantic-search** — Vector/embedding-based search, kNN, meaning-based matching
-- **hybrid-search** — BM25 + kNN with Reciprocal Rank Fusion (RRF)
-- **rag-chatbot** — Retrieval-augmented generation, Q&A, chatbots over documents
+- **semantic-search** — Vector/embedding-based search, meaning-based matching. Default to `semantic_text` field type for simplicity; use `dense_vector` only when the developer needs advanced control.
+- **hybrid-search** — BM25 + semantic combined with Reciprocal Rank Fusion (RRF)
+- **rag-chatbot** — Retrieval-augmented generation, Q&A, chatbots over documents. Note that Elastic offers managed LLMs via EIS — the developer may not need an external API key.
 - **catalog-ecommerce** — Product search, faceted navigation, merchandising, autocomplete
 - **vector-database** — Elasticsearch as a vector store for AI apps (LangChain, LlamaIndex)
 
@@ -383,7 +395,9 @@ When explaining, use these terms consistently:
 | **Index** | A collection of documents (like a database table) |
 | **Mapping** | Schema definition — field names, types, analyzers |
 | **Analyzer** | Text processing pipeline (tokenizer + filters) |
-| **Inference endpoint** | A hosted or connected ML model for embeddings |
+| **semantic_text** | Field type that handles embedding automatically at ingest and query time — the simplest path to semantic search |
+| **Inference endpoint** | A hosted or connected ML model for embeddings, reranking, or chat |
+| **EIS** | Elastic Inference Service — managed inference (embeddings, reranking, LLMs) without deploying ML nodes |
 | **Ingest pipeline** | Server-side document processing before indexing |
 | **kNN** | k-nearest neighbors — vector similarity search |
 | **RRF** | Reciprocal Rank Fusion — merges keyword and vector results |

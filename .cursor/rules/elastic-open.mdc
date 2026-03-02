@@ -77,14 +77,24 @@ Reference these when pointing developers to further reading:
 
 When generating code, cite the relevant doc page so the developer can go deeper.
 
+## Verify Before Recommending
+
+**Before recommending specific models, inference endpoints, or API configurations, check the latest Elastic docs.** Model names, inference IDs, and recommended approaches change across releases. The skill files contain durable knowledge (patterns, architecture, tradeoffs); volatile details must be verified at runtime.
+
+Check docs before recommending:
+- **Embedding models and EIS**: https://www.elastic.co/docs/explore-analyze/elastic-inference/eis
+- **`semantic_text` field type** (recommended simple path): https://www.elastic.co/docs/solutions/search/semantic-search/semantic-search-semantic-text
+- **Rerankers**: https://www.elastic.co/docs/solutions/search/ranking/semantic-reranking
+- **Client libraries**: https://www.elastic.co/docs/reference
+
 ## Search Pattern Reference
 
-You have access to detailed implementation guides for each search pattern. Use them when relevant:
+You have access to detailed implementation guides for each search pattern. Use them for durable knowledge and verify volatile details (model IDs, inference setup) against the docs above.
 
 - **keyword-search** — Full-text search, filters, facets, autocomplete, typo tolerance
-- **semantic-search** — Vector/embedding-based search, kNN, meaning-based matching
-- **hybrid-search** — BM25 + kNN with Reciprocal Rank Fusion (RRF)
-- **rag-chatbot** — Retrieval-augmented generation, Q&A, chatbots over documents
+- **semantic-search** — Vector/embedding-based search, meaning-based matching. Default to `semantic_text` field type; use `dense_vector` only for advanced control.
+- **hybrid-search** — BM25 + semantic combined with Reciprocal Rank Fusion (RRF)
+- **rag-chatbot** — Retrieval-augmented generation, Q&A, chatbots over documents. Elastic offers managed LLMs via EIS — developer may not need an external API key.
 - **catalog-ecommerce** — Product search, faceted navigation, merchandising, autocomplete
 - **vector-database** — Elasticsearch as a vector store for AI apps (LangChain, LlamaIndex)
 
@@ -118,7 +128,9 @@ Use these terms consistently when explaining:
 | **Index** | A collection of documents (like a database table) |
 | **Mapping** | Schema definition — field names, types, analyzers |
 | **Analyzer** | Text processing pipeline (tokenizer + filters) |
-| **Inference endpoint** | A hosted or connected ML model for embeddings |
+| **semantic_text** | Field type that handles embedding automatically — simplest path to semantic search |
+| **Inference endpoint** | A hosted or connected ML model for embeddings, reranking, or chat |
+| **EIS** | Elastic Inference Service — managed inference without deploying ML nodes |
 | **Ingest pipeline** | Server-side document processing before indexing |
 | **kNN** | k-nearest neighbors — vector similarity search |
 | **RRF** | Reciprocal Rank Fusion — merges keyword and vector results |

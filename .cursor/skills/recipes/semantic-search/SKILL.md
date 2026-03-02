@@ -19,88 +19,79 @@ Apply this guide when the developer signals:
 
 Do **not** use this guide when: exact matching (SKUs, IDs, categories) is primary, or when keyword search already satisfies the use case. Point them to the keyword-search approach or hybrid search.
 
-## 2. Architecture
+## 2. Two Paths: Simple vs Advanced
 
-Semantic search has three pieces the developer must understand:
+Elasticsearch offers two approaches to semantic search. **Always recommend the simple path first** unless the developer explicitly needs advanced control.
 
-1. **Embedding model (inference endpoint)** — Converts text to a dense vector. Elastic hosts models (ELSER, E5) or you connect external APIs (OpenAI, Cohere).
-2. **Vector field (`dense_vector`)** — Stores embeddings in the index. Dimensions must match the model output.
-3. **kNN query** — Finds documents whose vectors are nearest to the query vector. Use `query_vector_builder` so Elasticsearch embeds the query text at query time.
+### Simple path: `semantic_text` field type (recommended)
+
+The `semantic_text` field type handles embedding automatically at ingest and query time. No inference pipeline, no vector dimensions to configure, no `kNN` block in queries. The developer just maps a field as `semantic_text` and queries it with a regular `match` query.
+
+```json
+PUT /my-index
+{
+  "mappings": {
+    "properties": {
+      "content": {
+        "type": "semantic_text"
+      }
+    }
+  }
+}
+```
+
+On Serverless, this works with zero configuration — Elasticsearch selects a default model. On Elastic Stack, specify an `inference_id` pointing to an inference endpoint.
+
+Querying is a plain `match`:
+```json
+GET /my-index/_search
+{
+  "query": {
+    "match": {
+      "content": "comfortable headphones for running"
+    }
+  }
+}
+```
+
+### Advanced path: `dense_vector` + manual inference
+
+Use this only when the developer needs explicit control over vector dimensions, similarity functions, quantization, or custom models. This requires creating an inference endpoint, configuring vector dimensions, and using `kNN` queries.
 
 ## 3. Inference Endpoint Setup
 
-Ask which model the developer wants. Tradeoffs:
+**Important: Check the latest Elastic docs before recommending specific models or inference IDs.** Model availability, IDs, and configuration change across releases. Check https://www.elastic.co/docs/explore-analyze/elastic-inference/eis for current EIS models and https://www.elastic.co/docs/solutions/search/semantic-search/semantic-search-semantic-text for `semantic_text` setup.
 
-| Model | Pros | Cons | Dimensions |
-|-------|------|------|------------|
-| **ELSER** | Elastic's model, no API key, sparse vectors | English only, different query pattern | Sparse |
-| **E5 multilingual** | Multilingual, good quality, no API key | Requires Elastic to host | 768 |
-| **OpenAI** | High quality, widely used | API key, cost, latency | 1536 (ada-002) or 3072 |
-| **Cohere** | Multilingual, good for retrieval | API key, cost | 1024 |
+When discussing models, explain the tradeoffs at a high level:
 
-**ELSER (sparse, English):**
+| Category | What to tell the developer |
+|----------|---------------------------|
+| **EIS models (managed)** | No API key needed, no ML nodes to manage, token-based billing. Check docs for currently available embedding models (ELSER, Jina, etc.) |
+| **Self-hosted models** | Run on ML nodes in the developer's cluster. More control, no external dependency, but requires ML node capacity. |
+| **External APIs (OpenAI, Cohere, etc.)** | High quality, widely used, but requires an API key, has cost and latency implications. |
+| **Sparse vs Dense** | ELSER produces sparse vectors (good for English, different retrieval pattern). Most other models produce dense vectors (multilingual, more common). |
+
+Look up current model IDs and inference endpoint syntax from the docs — don't use hardcoded values from this file.
+
+**Example structure (verify model IDs against docs):**
 
 ```json
-PUT _inference/sparse_embedding/elser
+PUT _inference/text_embedding/<model-name>
 {
-  "service": "elasticsearch",
+  "service": "<service-name>",
   "service_settings": {
-    "model_id": ".elser_model_2",
-    "num_allocations": 1,
-    "num_threads": 1
+    "model_id": "<current-model-id>"
   }
 }
 ```
 
-**E5 multilingual (dense, 768 dims):**
-
-```json
-PUT _inference/text_embedding/e5-multilingual
-{
-  "service": "elasticsearch",
-  "service_settings": {
-    "model_id": ".multilingual-e5-small",
-    "num_allocations": 1,
-    "num_threads": 1
-  }
-}
-```
-
-**OpenAI (requires API key):**
-
-```json
-PUT _inference/text_embedding/openai-embeddings
-{
-  "service": "openai",
-  "service_settings": {
-    "api_key": "sk-..."
-  },
-  "task_settings": {
-    "model": "text-embedding-ada-002"
-  }
-}
-```
-
-**Cohere (requires API key):**
-
-```json
-PUT _inference/text_embedding/cohere-embeddings
-{
-  "service": "cohere",
-  "service_settings": {
-    "api_key": "your-cohere-api-key"
-  },
-  "task_settings": {
-    "model": "embed-multilingual-v3.0"
-  }
-}
-```
+Check docs for the correct `service` value (`elastic` for EIS, `elasticsearch` for self-hosted, `openai`/`cohere` for external) and current model IDs.
 
 ## 4. Index Mapping
 
-Add a `dense_vector` field with dimensions matching your model. Include metadata fields for filtering.
+**For the simple path (`semantic_text`)**, the mapping is minimal — see Section 2 above.
 
-**Example: products with embeddings**
+**For the advanced path (`dense_vector`)**, add a vector field with dimensions matching your model. Include metadata fields for filtering.
 
 ```json
 PUT /products-semantic
@@ -122,7 +113,7 @@ PUT /products-semantic
 }
 ```
 
-- **dims** — Must match model output (768 for E5, 1536 for OpenAI ada-002, 1024 for Cohere).
+- **dims** — Must match model output. Check your chosen model's documentation for the correct value.
 - **index: true** — Enables approximate kNN; required for efficient vector search.
 - **similarity** — `cosine` (default), `l2_norm`, or `dot_product`.
 
