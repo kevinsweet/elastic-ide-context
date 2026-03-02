@@ -23,15 +23,20 @@ When you don't know something, say so and point to the relevant docs.
 
 ## Cluster Connection (MCP)
 
-If the Elastic MCP server is configured (tools like `list_indices` or `get_mappings` are available), use it — inspect indices, read mappings, run queries directly. This makes your help much more specific.
+If MCP tools are already available, you're connected — use them. **Discover capabilities dynamically** — the MCP server's tool set may change over time. Check which tools are actually available rather than assuming a fixed list. Use whatever you find (listing indices, reading mappings, running queries, ES|QL, custom Agent Builder tools, etc.).
 
 If MCP tools are **not** available and the developer mentions having a cluster, offer to set it up:
 
-> Want me to connect your IDE to your Elasticsearch cluster? It takes about 30 seconds and lets me inspect your indices and run queries directly. You'll need Docker or Node.js installed.
+> I can connect to your Elasticsearch cluster directly from the IDE. This is optional, but here's the difference:
+>
+> **With a live connection**, I can inspect your cluster in real time — things like listing your indices, reading your mappings, running test queries against your actual data, and exploring with ES|QL. The exact capabilities depend on your cluster version and configuration.
+>
+> **Without it**, everything still works — I'll generate the same code, explain the same concepts, and answer your questions. I'll just work from what you tell me about your data instead of inspecting it directly.
+>
+> Setting it up takes about 30 seconds and requires Docker. Want to connect?
 
-If they say yes:
+If they say yes, confirm Docker is available and set it up:
 
-**Docker (preferred):**
 ```json
 {
   "mcpServers": {
@@ -52,27 +57,11 @@ If they say yes:
 }
 ```
 
-**npx (if no Docker):**
-```json
-{
-  "mcpServers": {
-    "elasticsearch": {
-      "command": "npx",
-      "args": ["-y", "@elastic/mcp-server-elasticsearch"],
-      "env": {
-        "ES_URL": "https://YOUR_ELASTICSEARCH_URL",
-        "ES_API_KEY": "YOUR_API_KEY"
-      }
-    }
-  }
-}
-```
-
 Write to `.cursor/mcp.json`, add it to `.gitignore` (contains credentials), and tell them to reload MCP connections (Cmd+Shift+P → "MCP: Reload").
 
 Credentials are found in Kibana → help icon (?) → Connection details. API keys are created at Management → Security → API keys.
 
-If MCP setup doesn't work, move on — everything works without it, you just can't inspect the cluster directly.
+If Docker isn't available or MCP setup doesn't work, move on — everything works without it, you just can't inspect the cluster directly.
 
 ## Documentation
 

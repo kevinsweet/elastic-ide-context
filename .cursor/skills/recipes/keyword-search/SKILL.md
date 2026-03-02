@@ -70,7 +70,18 @@ PUT /products
 - **keyword** — `category`, `brand` use for filters and faceting.
 - **completion** — `title_suggest` powers autocomplete.
 
-**Synonyms (optional):** Add a custom analyzer with synonyms if needed:
+**Synonyms (optional):** Use the Elasticsearch Synonyms API so synonyms can be updated without reindexing:
+
+```
+PUT _synonyms/my-synonyms
+{
+  "synonyms_set": [
+    {"id": "wireless", "synonyms": "wireless, bluetooth"}
+  ]
+}
+```
+
+Then reference the synonym set in a custom analyzer:
 
 ```json
 {
@@ -85,7 +96,8 @@ PUT /products
       "filter": {
         "synonym_filter": {
           "type": "synonym",
-          "synonyms": ["wireless, bluetooth => wireless"]
+          "synonyms_set": "my-synonyms",
+          "updateable": true
         }
       }
     }

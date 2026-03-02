@@ -16,9 +16,10 @@ If the developer's first message is vague, generic, or exploratory — things li
 >
 > - **Product or catalog search** — "I need search with filters and autocomplete for an online store"
 > - **Knowledge base search** — "I want people to search our docs and find relevant articles"
-> - **AI-powered assistant** — "I want to build a chatbot that answers questions from our data"
+> - **RAG / Q&A / AI assistant** — "I want users to ask questions and get answers from our data — not just a list of links"
 > - **Recommendations** — "I need 'you might also like' suggestions based on content similarity"
 > - **Customer support search** — "I want agents to find similar resolved tickets fast"
+> - **People or talent search** — "I need recruiters to search candidates by skills, experience, and location"
 > - **Location-based search** — "I need a store locator that finds nearby locations"
 > - **Vector database** — "I want to use Elasticsearch as a vector store for my AI pipeline"
 >
@@ -28,19 +29,27 @@ Keep it to one question. The examples help the developer understand the range of
 
 If the developer asks **"what can I build?"**, **"what can Elastic do?"**, **"show me use cases"**, or similar — refer to the **use-case-library** skill for the full map of use cases, industry examples, and technologies. Walk through it conversationally, don't dump the whole list.
 
+If the developer's first message is very open-ended (e.g., "I want to add search" or "I'm exploring Elasticsearch") and the opener examples alone don't seem to resonate, you can briefly mention: "I can also walk you through everything Elasticsearch can do if that would help — just say the word." Don't dump the full library unprompted.
+
 If the developer's first message already describes what they're building, skip this and go straight to Step 1.
 
 ## Cluster Connection (MCP)
 
-Before starting the playbook, check if the Elastic MCP server is configured. If MCP tools like `list_indices` or `get_mappings` are available, you're already connected — proceed to the playbook.
+Check MCP after the developer's first substantive message — once you know what they're building. Don't check MCP during the opener. If MCP tools are already available, you're connected — proceed normally.
 
-If MCP tools are **not** available and the developer mentions having an Elasticsearch cluster, offer to set it up early so you can inspect their data later. Say something like:
+**Discover capabilities dynamically.** The MCP server's tool set may change over time. When connected, check which tools are actually available rather than assuming a fixed list. Use what you find — for example, if tools for listing indices, reading mappings, or running queries exist, use them. If the tool set is broader (e.g., Agent Builder MCP with custom tools), take advantage of whatever is available. Don't hardcode assumptions about what MCP can or can't do.
 
-> Before we dive in — want me to connect your IDE to your Elasticsearch cluster? It takes about 30 seconds and lets me inspect your indices and run queries directly. You'll need Docker or Node.js installed.
+If MCP tools are **not** available and the developer mentions having an Elasticsearch cluster or existing data, offer to set it up before Step 2 (data questions). Explain what it does and what changes without it, so they can make an informed choice:
 
-If they say yes, try **Docker** first (preferred), fall back to **npx** if Docker isn't available, and move on gracefully if neither works.
+> Before we dive in — I can connect to your Elasticsearch cluster directly from the IDE. This is optional, but here's the difference:
+>
+> **With a live connection**, I can inspect your cluster in real time — things like listing your indices, reading your mappings, running test queries against your actual data, and exploring with ES|QL. The exact capabilities depend on your cluster version and configuration.
+>
+> **Without it**, everything else still works — I'll generate the same code, walk through the same mapping decisions, and explain the same concepts. I'll just work from what you tell me about your data instead of inspecting it directly.
+>
+> Setting it up takes about 30 seconds and requires Docker. Want to connect?
 
-**Option A: Docker (preferred)**
+If they say yes, confirm Docker is available and set it up. The MCP server is distributed as a Docker image — no other runtime needed.
 
 1. Ask them to confirm Docker is running (`docker --version` in their terminal)
 2. Write `.cursor/mcp.json` in their project root:
@@ -67,30 +76,11 @@ If they say yes, try **Docker** first (preferred), fall back to **npx** if Docke
 
 Replace `YOUR_ELASTICSEARCH_URL` with their Elasticsearch endpoint (found in Kibana → help icon → Connection details → Elasticsearch endpoint) and `YOUR_API_KEY` with the API key they created.
 
-3. Tell them: "Now reload your MCP connections — open the Command Palette (Cmd+Shift+P) and search for 'MCP: Reload.' Once it reconnects, I'll be able to see your indices, read your mappings, and run queries directly."
+3. Tell them: "Now reload your MCP connections — open the Command Palette (Cmd+Shift+P) and search for 'MCP: Reload.' Once it reconnects, I'll be able to list your indices, read your mappings, and run queries directly."
 
-**Option B: npx (if Docker isn't available)**
+**If Docker isn't available**, don't make them feel stuck:
 
-```json
-{
-  "mcpServers": {
-    "elasticsearch": {
-      "command": "npx",
-      "args": ["-y", "@elastic/mcp-server-elasticsearch"],
-      "env": {
-        "ES_URL": "https://YOUR_ELASTICSEARCH_URL",
-        "ES_API_KEY": "YOUR_API_KEY"
-      }
-    }
-  }
-}
-```
-
-Same reload step as above.
-
-**If neither works**, don't make them feel stuck:
-
-> No worries — everything else works without the live connection. I just won't be able to inspect your cluster directly, so I'll work from what you tell me about your data. We can always set up the connection later if your environment allows it.
+> No worries — everything else works without the live connection. I just won't be able to inspect your cluster directly, so I'll work from what you tell me about your data. We can always set up the connection later if you get Docker installed.
 
 **Important: add `.cursor/mcp.json` to `.gitignore`** — it contains API credentials that should not be committed to version control. After writing the file, check if `.gitignore` exists and add `.cursor/mcp.json` to it. If there's no `.gitignore`, create one.
 
@@ -142,7 +132,9 @@ If the answer is **people searching directly**, continue to the natural language
 
 If yes, the recommendation in Step 3 should include semantic search alongside keyword — not as an alternative, but as an additional layer that catches meaning-based queries that keywords alone would miss. Don't skip this question.
 
-**Follow-up (if relevant): "Do different users see different data?"** If the use case involves multi-tenant data, role-based access, or any scenario where search results should be filtered by who's asking (e.g., "users can only search their own organization's documents"), flag that Elasticsearch supports [document-level security](https://www.elastic.co/docs/deploy-manage/users-roles/cluster-or-deployment-auth/restricting-connections#document-level-security) via role-based access control. This affects index design (you may need a tenant field) and query architecture. Ask about this early — bolting it on later is painful.
+**If the developer isn't sure**, briefly explain the difference in one or two sentences — keyword matches exact terms in the text, semantic matches the meaning behind the query even when the exact words don't appear. Then suggest hybrid as a safe default: "When in doubt, hybrid gives you both — we can always simplify later if you don't need it." Let them confirm and move on.
+
+**Follow-up (after Step 1, before Step 2): "Do different users see different data?"** Ask this once you know what they're building but before you design the mapping. If the use case involves multiple organizations, tenants, user roles, or any scenario where different users should see different results (e.g., "recruiters only see their agency's candidates," "users can only search their own organization's documents"), flag that Elasticsearch supports [document-level security](https://www.elastic.co/docs/deploy-manage/users-roles/cluster-or-deployment-auth/restricting-connections#document-level-security) via role-based access control. This affects index design (you'll need a tenant field) and query architecture. Ask: "Do different users see different data, or does everyone see the same results?" Don't skip this for use cases where multi-tenancy is common (SaaS, marketplaces, talent platforms, support tools).
 
 **Time-series data.** If the developer describes data that's append-only and timestamped (logs, events, metrics, IoT sensor data), recommend **data streams** instead of regular indices. Data streams automatically manage rollover, work with index lifecycle management (ILM) for retention, and are the standard for time-series data in Elasticsearch. This is a fundamentally different index strategy — surface it early rather than retrofitting later.
 
@@ -169,6 +161,7 @@ This determines the ingestion approach:
 | **REST API** | Script that pulls from the API and bulk-indexes |
 | **Database (Postgres, MySQL, MongoDB)** | Bulk API script with a database client — pull, transform, index |
 | **Another Elasticsearch index** | Reindex API — no external code |
+| **Documents (PDF, Word, HTML)** | Extract text (pdf-parse, pdfplumber, Apache Tika), chunk into passages, bulk index. For large doc sets, build a processing script. |
 | **Streaming (Kafka, webhooks, events)** | Data streams + ingest pipeline, or Elastic Agent / OpenTelemetry |
 | **Not sure yet / just exploring** | Start with sample data, add real ingestion later |
 
@@ -177,6 +170,8 @@ This determines the ingestion approach:
 **Important:** Not every developer wants to start with sample data. Some already have their data and want to ingest it for real. If they've told you where their data lives and what it looks like, generate code that connects to their actual source — don't force a "paste a sample first" step they don't need.
 
 **Third: What language is your application in?** Ask: "What language are you building in — Python, JavaScript/TypeScript, Java, Go, or something else?" Generate all code in their language using the appropriate Elasticsearch client library. Don't assume Python.
+
+**Fourth (RAG only): Which LLM will you use?** If the use case is RAG, ask one more question: "Which LLM will you use for generating answers — OpenAI, Anthropic, a local model, or something else? If you're not sure yet, I'll default to OpenAI and you can swap it later." This determines the SDK and API key needed in the generated code.
 
 Use what you learn to determine:
 - What fields to map (text, keyword, numeric, nested)
@@ -204,6 +199,8 @@ Every capability you list should include a brief, jargon-free explanation of wha
 > I'd also recommend adding **semantic search** on top of the keyword matching. This means when someone searches "comfortable shoes for long walks," it finds relevant products even if those exact words don't appear in the product name or description — it understands the *meaning* behind the query. The tradeoff is it requires an embedding model (Elastic provides one built-in called ELSER, or you can use OpenAI/Cohere), and indexing is slightly slower because each document gets a vector embedding generated. Worth it?
 
 Don't silently omit semantic when it would help. Don't force it when it wouldn't (e.g., pure structured filtering, log search, ID lookups). Let the developer decide, but make sure they have the information to decide well.
+
+**This also applies to RAG retrieval.** If the developer's documents contain specific terms, codes, or proper nouns that users will search for exactly (e.g., policy names, product IDs, error codes, legal citations), recommend hybrid retrieval — BM25 catches exact matches while semantic catches meaning-based queries. The retrieval step benefits from the same hybrid logic as search.
 
 **Wait for confirmation before generating code.** The developer might want to drop a capability, add one, or ask questions. This is a conversation, not a deployment pipeline.
 
@@ -234,6 +231,8 @@ For example:
 >
 > Does this mapping look right for your data? Anything you'd add, remove, or change?
 
+**Clarify ambiguous field names.** If a field name could mean different things (e.g., `weight` could mean physical weight or relevance/popularity score, `status` could mean many things, `type` is often overloaded), ask the developer what it represents before assigning a type. A wrong type means reindexing.
+
 **Wait for confirmation before generating code.** Mapping changes are the most expensive thing to fix later, so get this right first. If the developer wants changes, adjust the mapping and re-present it.
 
 ### Step 5: Build
@@ -243,7 +242,7 @@ Once the developer confirms the mapping, generate the complete implementation:
 2. **Ingestion** — Use the approach determined in Step 2 (Kibana upload, bulk API, reindex, streaming, etc.). Don't default to a bulk script if the developer's data source has a better path.
 3. **Search API endpoint** with all confirmed capabilities
 4. **Getting started instructions** (see the credential walkthrough section below)
-5. **Pagination** — Always include pagination in search endpoints. Use `from`/`size` for basic pagination (suitable for most use cases up to 10,000 results). For deep pagination or large result sets, use `search_after` with a point-in-time (PIT). Explain the tradeoff briefly: `from`/`size` is simpler but has a 10,000-hit limit; `search_after` scales indefinitely but requires tracking a cursor.
+5. **Pagination** — Always include pagination in search endpoints. Use `from`/`size` for basic pagination — simple to implement and works well for the first few hundred pages (up to 10,000 results total). Beyond that, Elasticsearch blocks the request. For infinite scroll, export, or any result set that could exceed 10,000, use `search_after` with a point-in-time (PIT) — it scales to any depth but requires tracking a sort cursor between requests. Recommend `from`/`size` as the default and mention `search_after` as the upgrade path. **For RAG endpoints**, pagination applies to the retrieval step (top-k chunks) and source citations — not the generated answer itself. Include a `k` parameter for how many chunks to retrieve, and optionally paginate the sources list.
 
 Generate code in the developer's preferred language from Step 2. Don't ask for permission to generate code at this point — they already confirmed both the approach and the mapping. Just build it.
 

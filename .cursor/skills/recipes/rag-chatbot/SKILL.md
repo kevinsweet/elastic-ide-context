@@ -19,6 +19,8 @@ Apply this guide when the developer signals:
 
 Do **not** use this guide when: the developer only needs search results (not generated answers) — point them to keyword, semantic, or hybrid search instead.
 
+**Language adaptation:** Code examples below are in Python. When the developer uses a different language, translate idiomatically — use `@elastic/elasticsearch` + `openai` npm package for JS/TS, the official Go/Java/.NET client for those languages. For PDF extraction: `pdf-parse` (JS), Apache Tika (Java), `pdfplumber` (Python). For chunking: LangChain has JS, Python, and Java SDKs.
+
 ## 2. Architecture
 
 RAG has four stages:

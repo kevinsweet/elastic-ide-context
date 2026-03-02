@@ -24,6 +24,22 @@ Do **not** use this guide when: the developer only needs document search without
 
 E-commerce indices need text fields for search, keyword fields for filtering/faceting, numeric fields for sorting/range filters, and nested fields for variants.
 
+First, create a synonym set via the Synonyms API (updateable without reindexing):
+
+```
+PUT _synonyms/product-synonyms
+{
+  "synonyms_set": [
+    {"id": "laptop", "synonyms": "laptop, notebook"},
+    {"id": "phone", "synonyms": "phone, mobile, cell phone"},
+    {"id": "tv", "synonyms": "tv, television"},
+    {"id": "headphones", "synonyms": "headphones, earphones, earbuds"}
+  ]
+}
+```
+
+Then create the index referencing that synonym set:
+
 ```json
 PUT /products
 {
@@ -49,12 +65,8 @@ PUT /products
         },
         "product_synonyms": {
           "type": "synonym",
-          "synonyms": [
-            "laptop, notebook => laptop",
-            "phone, mobile, cell phone => phone",
-            "tv, television => tv",
-            "headphones, earphones, earbuds => headphones"
-          ]
+          "synonyms_set": "product-synonyms",
+          "updateable": true
         }
       }
     }
