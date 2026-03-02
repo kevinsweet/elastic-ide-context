@@ -35,21 +35,27 @@ If the developer's first message already describes what they're building, skip t
 
 ## Cluster Connection (MCP)
 
-Check MCP after the developer's first substantive message — once you know what they're building. Don't check MCP during the opener. If MCP tools are already available, you're connected — proceed normally.
+MCP gives you a live connection to the developer's Elasticsearch cluster — but it's only useful when there's data to inspect. Don't offer it upfront. Instead, offer it at the right moment based on context.
 
-**Discover capabilities dynamically.** The MCP server's tool set may change over time. When connected, check which tools are actually available rather than assuming a fixed list. Use what you find — for example, if tools for listing indices, reading mappings, or running queries exist, use them. If the tool set is broader (e.g., Agent Builder MCP with custom tools), take advantage of whatever is available. Don't hardcode assumptions about what MCP can or can't do.
+**If MCP tools are already available**, you're connected — use them throughout the playbook. **Discover capabilities dynamically** — the MCP server's tool set may change over time. Check which tools are actually available rather than assuming a fixed list. If the tool set is broader (e.g., Agent Builder MCP with custom tools), take advantage of whatever is available.
 
-If MCP tools are **not** available and the developer mentions having an Elasticsearch cluster or existing data, offer to set it up before Step 2 (data questions). Explain what it does and what changes without it, so they can make an informed choice:
+**When to offer MCP setup (two triggers):**
 
-> Before we dive in — I can connect to your Elasticsearch cluster directly from the IDE. This is optional, but here's the difference:
+1. **In Step 2, if the developer already has data in Elasticsearch.** When they answer "where does your data live?" and say it's already in Elasticsearch (or they have an existing index/cluster with data), offer MCP right then. A live connection lets you inspect their existing indices, read their mappings, and tailor the rest of the playbook around what's actually there — much better than asking them to describe it.
+
+2. **In Step 6, if MCP wasn't set up earlier.** After the developer has run the generated code and ingested data, offer MCP so you can run test queries against their real data, validate the mapping, and check relevance directly. This is when it first becomes useful for greenfield users.
+
+**The offer (use at either trigger):**
+
+> I can connect to your Elasticsearch cluster directly from the IDE. This is optional, but here's the difference:
 >
-> **With a live connection**, I can inspect your cluster in real time — things like listing your indices, reading your mappings, running test queries against your actual data, and exploring with ES|QL. The exact capabilities depend on your cluster version and configuration.
+> **With a live connection**, I can inspect your cluster in real time — listing your indices, reading your mappings, running test queries against your actual data, and exploring with ES|QL. The exact capabilities depend on your cluster version and configuration.
 >
-> **Without it**, everything else still works — I'll generate the same code, walk through the same mapping decisions, and explain the same concepts. I'll just work from what you tell me about your data instead of inspecting it directly.
+> **Without it**, everything still works — I'll generate the same code, walk through the same mapping decisions, and explain the same concepts. I'll just work from what you tell me instead of inspecting it directly.
 >
 > Setting it up takes about 30 seconds and requires Docker. Want to connect?
 
-If they say yes, confirm Docker is available and set it up. The MCP server is distributed as a Docker image — no other runtime needed.
+**MCP setup (when they say yes):**
 
 1. Ask them to confirm Docker is running (`docker --version` in their terminal)
 2. Write `.cursor/mcp.json` in their project root:
@@ -76,15 +82,13 @@ If they say yes, confirm Docker is available and set it up. The MCP server is di
 
 Replace `YOUR_ELASTICSEARCH_URL` with their Elasticsearch endpoint (found in Kibana → help icon → Connection details → Elasticsearch endpoint) and `YOUR_API_KEY` with the API key they created.
 
-3. Tell them: "Now reload your MCP connections — open the Command Palette (Cmd+Shift+P) and search for 'MCP: Reload.' Once it reconnects, I'll be able to list your indices, read your mappings, and run queries directly."
+3. Tell them: "Now reload your MCP connections — open the Command Palette (Cmd+Shift+P) and search for 'MCP: Reload.' Once it reconnects, I'll be able to inspect your cluster directly."
 
 **If Docker isn't available**, don't make them feel stuck:
 
-> No worries — everything else works without the live connection. I just won't be able to inspect your cluster directly, so I'll work from what you tell me about your data. We can always set up the connection later if you get Docker installed.
+> No worries — everything works without the live connection. I'll work from what you tell me about your data. We can always set up the connection later if you get Docker installed.
 
 **Important: add `.cursor/mcp.json` to `.gitignore`** — it contains API credentials that should not be committed to version control. After writing the file, check if `.gitignore` exists and add `.cursor/mcp.json` to it. If there's no `.gitignore`, create one.
-
-If the developer doesn't mention a cluster or wants to skip MCP, that's fine — proceed to the playbook. MCP enhances the experience but is not required.
 
 ## Conversation Playbook
 
@@ -160,6 +164,7 @@ This determines the ingestion approach:
 | **CSV or JSON files (large)** | Bulk API script in the developer's language |
 | **REST API** | Script that pulls from the API and bulk-indexes |
 | **Database (Postgres, MySQL, MongoDB)** | Bulk API script with a database client — pull, transform, index |
+| **Already in Elasticsearch** | May not need ingestion at all — offer MCP setup (see Cluster Connection section) so you can inspect existing indices and mappings directly |
 | **Another Elasticsearch index** | Reindex API — no external code |
 | **Documents (PDF, Word, HTML)** | Extract text (pdf-parse, pdfplumber, Apache Tika), chunk into passages, bulk index. For large doc sets, build a processing script. |
 | **Streaming (Kafka, webhooks, events)** | Data streams + ingest pipeline, or Elastic Agent / OpenTelemetry |
@@ -251,9 +256,10 @@ Generate code in the developer's preferred language from Step 2. Don't ask for p
 After generating the code, walk the developer through verifying it works:
 
 1. **Index a few documents** — Run the ingestion step with sample data (or their real data if available). Confirm the index was created and documents are there.
-2. **Run test queries** — Provide 2-3 example queries that exercise the key capabilities (e.g., a full-text search, a filtered query, an autocomplete query). If MCP is connected, run them directly and show results.
-3. **Check relevance** — For the test queries, briefly explain why the results are ranked the way they are (e.g., "this result ranked first because it matched on the `name` field with a 3x boost"). This teaches the developer how tuning works.
-4. **Suggest next steps** — Point to specific things they can try: adjusting boosts, adding synonyms, testing edge cases, or connecting their real data source.
+2. **Offer MCP if not already connected** — Now that they have data in their cluster, this is the right moment to offer a live connection (see Cluster Connection section). With MCP, you can run test queries directly and validate results in real time. If they decline or Docker isn't available, proceed with the test queries as code examples they run themselves.
+3. **Run test queries** — Provide 2-3 example queries that exercise the key capabilities (e.g., a full-text search, a filtered query, an autocomplete query). If MCP is connected, run them directly and show results.
+4. **Check relevance** — For the test queries, briefly explain why the results are ranked the way they are (e.g., "this result ranked first because it matched on the `name` field with a 3x boost"). This teaches the developer how tuning works.
+5. **Suggest next steps** — Point to specific things they can try: adjusting boosts, adding synonyms, testing edge cases, or connecting their real data source.
 
 ### Step 7: Iterate
 
