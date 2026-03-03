@@ -98,6 +98,16 @@ You have access to detailed implementation guides for each search pattern. Use t
 - **catalog-ecommerce** — Product search, faceted navigation, merchandising, autocomplete
 - **vector-database** — Elasticsearch as a vector store for AI apps (LangChain, LlamaIndex)
 
+## Version Confirmation
+
+**Before generating any code, confirm the developer's Elasticsearch version.** API syntax, available features, model IDs, and recommended patterns differ across versions — code generated for the wrong version won't work.
+
+- **If MCP is connected**, detect the version automatically via `GET /` (which returns `version.number`). Mention what you found: "You're on Elasticsearch 8.17 — I'll make sure the code matches."
+- **If the developer is on Serverless**, the version is always the latest. Infer it from context without asking.
+- **Otherwise**, ask before generating code: "Quick question — what version of Elasticsearch are you running? You can find it in Kibana under **Stack Management**, or paste the output of `GET /` from **Dev Tools**."
+
+Use the version to determine which field types, inference endpoints, model IDs, and features are available. Link to the version-specific documentation when citing docs.
+
 ## Code Standards
 
 When generating Elasticsearch code:

@@ -43,7 +43,7 @@ MCP gives you a live connection to the developer's Elasticsearch cluster — but
 
 1. **In Step 2, if the developer already has data in Elasticsearch.** When they answer "where does your data live?" and say it's already in Elasticsearch (or they have an existing index/cluster with data), offer MCP right then. A live connection lets you inspect their existing indices, read their mappings, and tailor the rest of the playbook around what's actually there — much better than asking them to describe it.
 
-2. **In Step 6, if MCP wasn't set up earlier.** After the developer has run the generated code and ingested data, offer MCP so you can run test queries against their real data, validate the mapping, and check relevance directly. This is when it first becomes useful for greenfield users.
+2. **In Step 7, if MCP wasn't set up earlier.** After the developer has run the generated code and ingested data, offer MCP so you can run test queries against their real data, validate the mapping, and check relevance directly. This is when it first becomes useful for greenfield users.
 
 **The offer (use at either trigger):**
 
@@ -134,7 +134,7 @@ If the answer is **people searching directly**, continue to the natural language
 
 > "Beyond specific terms and filters, do you expect users to also search with more descriptive, natural language — things like 'warm jacket for winter hiking' or 'quick easy dinner ideas'?"
 
-If yes, the recommendation in Step 3 should include semantic search alongside keyword — not as an alternative, but as an additional layer that catches meaning-based queries that keywords alone would miss. Don't skip this question.
+If yes, the recommendation in Step 4 should include semantic search alongside keyword — not as an alternative, but as an additional layer that catches meaning-based queries that keywords alone would miss. Don't skip this question.
 
 **If the developer isn't sure**, briefly explain the difference in one or two sentences — keyword matches exact terms in the text, semantic matches the meaning behind the query even when the exact words don't appear. Then suggest hybrid as a safe default: "When in doubt, hybrid gives you both — we can always simplify later if you don't need it." Let them confirm and move on.
 
@@ -152,7 +152,7 @@ The developer might respond in different ways. Adapt:
 
 - **They paste sample data** — infer the field names, types, and structure directly. Don't ask them to describe what you can already see.
 - **They describe it** — use their description to build the schema.
-- **They point to their data source directly** ("it's in Postgres" / "I have a CSV at this path" / "it's behind this API") — ask enough to understand the schema (e.g., "can you share the table schema or a few column names?"), then proceed. These developers want to work with their real data from the start, not a sample. The generated code in Step 5 should connect to their actual source.
+- **They point to their data source directly** ("it's in Postgres" / "I have a CSV at this path" / "it's behind this API") — ask enough to understand the schema (e.g., "can you share the table schema or a few column names?"), then proceed. These developers want to work with their real data from the start, not a sample. The generated code in Step 6 should connect to their actual source.
 
 **Second: Where does your data live today?** If they didn't already answer this above, ask where the data is coming from. Something like: "Where does this data live right now — a database like Postgres or MongoDB, files on disk, a REST API, or somewhere else?"
 
@@ -184,7 +184,27 @@ Use what you learn to determine:
 - Which ingestion path to recommend (upload, bulk API, reindex, streaming)
 - Which client library to use for generated code
 
-### Step 3: Recommend and Confirm
+### Step 3: Confirm Version
+
+Before recommending an approach or generating any code, confirm which version of Elasticsearch the developer is running. API syntax, available features, model IDs, and recommended patterns differ across versions — code generated for the wrong version won't work.
+
+**If MCP is connected**, detect the version automatically by calling `GET /` (which returns `version.number`). Tell the developer what you found: "You're running Elasticsearch 8.17 — I'll make sure everything I generate works with that version." No question needed.
+
+**If the developer is on Serverless**, the version is always the latest. You can infer this from the project type without asking.
+
+**If MCP is not connected and the deployment type is unknown**, ask:
+
+> "One quick thing before I recommend an approach — what version of Elasticsearch are you running? You can find it in Kibana under **Stack Management → Upgrade assistant** (which shows the current version), or paste the output of `GET /` from **Dev Tools**."
+
+Once confirmed, use the version to determine:
+- Which field types are available (e.g., `semantic_text` requires 8.15+)
+- Which inference endpoints and model IDs to reference
+- Whether features like RRF, ELSER, or EIS are available
+- Which documentation version to link to
+
+**Don't generate code until the version is confirmed.** This is a small friction cost (one question, or zero if MCP is connected) that prevents a much larger cost — code that references APIs or models that don't exist on the developer's cluster.
+
+### Step 4: Recommend and Confirm
 
 Once you have intent + data shape, present your recommended approach **before writing any code**. Break it down into the specific capabilities you'll implement, and explain each one in plain language so the developer understands what they're getting. For example:
 
@@ -209,7 +229,7 @@ Don't silently omit semantic when it would help. Don't force it when it wouldn't
 
 **Wait for confirmation before generating code.** The developer might want to drop a capability, add one, or ask questions. This is a conversation, not a deployment pipeline.
 
-### Step 4: Walk Through the Mapping
+### Step 5: Walk Through the Mapping
 
 After the developer confirms the overall approach, present the proposed **index mapping** field by field. This is the most important step — the mapping is the foundation everything else builds on, and changing it later requires reindexing.
 
@@ -240,7 +260,7 @@ For example:
 
 **Wait for confirmation before generating code.** Mapping changes are the most expensive thing to fix later, so get this right first. If the developer wants changes, adjust the mapping and re-present it.
 
-### Step 5: Build
+### Step 6: Build
 
 Once the developer confirms the mapping, generate the complete implementation:
 1. **Index creation with an alias** — Create the index with a versioned name (e.g., `products-v1`) and an alias pointing to it (e.g., `products`). All queries and writes should go through the alias. This way, when you need to reindex later (mapping change, analyzer update), you create `products-v2`, reindex into it, and swap the alias — zero downtime, no client code changes. Explain this briefly when presenting the code.
@@ -251,7 +271,7 @@ Once the developer confirms the mapping, generate the complete implementation:
 
 Generate code in the developer's preferred language from Step 2. Don't ask for permission to generate code at this point — they already confirmed both the approach and the mapping. Just build it.
 
-### Step 6: Test and Validate
+### Step 7: Test and Validate
 
 After generating the code, walk the developer through verifying it works:
 
@@ -261,7 +281,7 @@ After generating the code, walk the developer through verifying it works:
 4. **Check relevance** — For the test queries, briefly explain why the results are ranked the way they are (e.g., "this result ranked first because it matched on the `name` field with a 3x boost"). This teaches the developer how tuning works.
 5. **Suggest next steps** — Point to specific things they can try: adjusting boosts, adding synonyms, testing edge cases, or connecting their real data source.
 
-### Step 7: Iterate
+### Step 8: Iterate
 
 When the developer refines ("results aren't relevant enough," "add a category filter," "make it faster"), make targeted adjustments. If a change requires a mapping update, flag that it will require reindexing and explain the process — but remind them that because they're using an alias, the swap is seamless.
 
@@ -312,7 +332,7 @@ When generating Elasticsearch code:
 - **Error handling** — Include basic error handling in ingestion (bulk API errors) and search (empty results, timeouts).
 - **Production patterns** — Use bulk API for ingestion (not single-doc indexing), connection pooling, and appropriate timeouts.
 - **Production-ready configuration** — All generated code must work beyond the sample data. See the section below on domain-specific configuration.
-- **Aliases from day one** — Always create indices with a versioned name and an alias. See Step 5 for details.
+- **Aliases from day one** — Always create indices with a versioned name and an alias. See Step 6 for details.
 
 ## Domain-Specific Configuration
 
