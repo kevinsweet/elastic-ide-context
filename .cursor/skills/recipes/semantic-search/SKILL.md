@@ -129,7 +129,7 @@ PUT _ingest/pipeline/embed-products
   "processors": [
     {
       "inference": {
-        "model_id": "e5-multilingual",
+        "model_id": "<YOUR_EMBEDDING_MODEL>",
         "input_output": [
           {
             "input_field": "description",
@@ -141,6 +141,8 @@ PUT _ingest/pipeline/embed-products
   ]
 }
 ```
+
+> **Replace `<YOUR_EMBEDDING_MODEL>`** with the inference endpoint ID you created in Section 3. Check [EIS models](https://www.elastic.co/docs/explore-analyze/elastic-inference/eis) for current options.
 
 **Bulk index with pipeline:**
 
@@ -182,7 +184,7 @@ GET /products-semantic/_search
     "field": "embedding",
     "query_vector_builder": {
       "text_embedding": {
-        "model_id": "e5-multilingual",
+        "model_id": "<YOUR_EMBEDDING_MODEL>",
         "model_text": "comfortable noise cancelling headphones for running"
       }
     },
@@ -201,7 +203,7 @@ GET /products-semantic/_search
     "field": "embedding",
     "query_vector_builder": {
       "text_embedding": {
-        "model_id": "e5-multilingual",
+        "model_id": "<YOUR_EMBEDDING_MODEL>",
         "model_text": "wireless headphones"
       }
     },
@@ -240,7 +242,7 @@ def semantic_search():
         "field": "embedding",
         "query_vector_builder": {
             "text_embedding": {
-                "model_id": "e5-multilingual",
+                "model_id": "<YOUR_EMBEDDING_MODEL>",
                 "model_text": q
             }
         },
@@ -271,7 +273,7 @@ def semantic_search():
 |----------|--------|
 | "Results aren't relevant" | Increase `num_candidates`; try a different model; add hybrid search (keyword + vector) with RRF. |
 | "How do I add filters to vector search?" | Add a `filter` object inside the `knn` block. |
-| "Which model should I use?" | E5 multilingual for no-API-key, multilingual. OpenAI/Cohere for highest quality and external ecosystem. |
+| "Which model should I use?" | Check [EIS models](https://www.elastic.co/docs/explore-analyze/elastic-inference/eis) for current managed options (no API key needed). OpenAI/Cohere for external ecosystem. |
 | "How do I switch models?" | Create a new inference endpoint, new index with matching dims, reindex with new pipeline. |
 
 ## 10. When to Upgrade

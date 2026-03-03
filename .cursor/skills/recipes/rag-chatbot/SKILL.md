@@ -133,7 +133,7 @@ PUT _ingest/pipeline/embed-knowledge-base
   "processors": [
     {
       "inference": {
-        "model_id": "e5-multilingual",
+        "model_id": "<YOUR_EMBEDDING_MODEL>",
         "input_output": [
           {
             "input_field": "content",
@@ -145,6 +145,8 @@ PUT _ingest/pipeline/embed-knowledge-base
   ]
 }
 ```
+
+> **Replace `<YOUR_EMBEDDING_MODEL>`** with your inference endpoint ID. Check [EIS models](https://www.elastic.co/docs/explore-analyze/elastic-inference/eis) for current managed options — no API key or ML nodes needed.
 
 **Bulk index chunks:**
 
@@ -172,7 +174,7 @@ GET /knowledge-base/_search
     "field": "embedding",
     "query_vector_builder": {
       "text_embedding": {
-        "model_id": "e5-multilingual",
+        "model_id": "<YOUR_EMBEDDING_MODEL>",
         "model_text": "How do I configure index mappings?"
       }
     },
@@ -200,7 +202,7 @@ POST /knowledge-base/_search
             "field": "embedding",
             "query_vector_builder": {
               "text_embedding": {
-                "model_id": "e5-multilingual",
+                "model_id": "<YOUR_EMBEDDING_MODEL>",
                 "model_text": "How do I configure index mappings?"
               }
             },
@@ -225,7 +227,7 @@ GET /knowledge-base/_search
     "field": "embedding",
     "query_vector_builder": {
       "text_embedding": {
-        "model_id": "e5-multilingual",
+        "model_id": "<YOUR_EMBEDDING_MODEL>",
         "model_text": "How do I configure mappings?"
       }
     },
@@ -257,7 +259,7 @@ def ask(question: str, k: int = 5) -> dict:
             "field": "embedding",
             "query_vector_builder": {
                 "text_embedding": {
-                    "model_id": "e5-multilingual",
+                    "model_id": "<YOUR_EMBEDDING_MODEL>",
                     "model_text": question
                 }
             },

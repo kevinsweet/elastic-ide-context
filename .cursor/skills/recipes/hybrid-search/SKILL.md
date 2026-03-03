@@ -78,15 +78,14 @@ Same as semantic search: create an inference endpoint for your embedding model.
 ```json
 PUT _inference/text_embedding/my-embedding-model
 {
-  "service": "elasticsearch",
+  "service": "<service-name>",
   "service_settings": {
-    "model_id": "sentence-transformers__all-MiniLM-L6-v2"
-  },
-  "task_settings": {
-    "dimensions": 384
+    "model_id": "<current-model-id>"
   }
 }
 ```
+
+> **Replace `<service-name>` and `<current-model-id>`** with your chosen model. Check [EIS models](https://www.elastic.co/docs/explore-analyze/elastic-inference/eis) for managed options (use `"service": "elastic"`). Set `dims` in the mapping to match your model's output dimensions.
 
 ## Ingestion
 
