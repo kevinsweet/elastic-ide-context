@@ -16,12 +16,12 @@ This repo includes two rule files. **Guided Mode is active by default.** Both fi
 
 ### Switching Modes
 
-To switch from Guided to Open (or back), swap which file has `alwaysApply: true` in its frontmatter:
+Each rule file has a settings block at the top. The line `alwaysApply: true` means that mode is active. To switch:
 
-1. Open the mode you want → set `alwaysApply: true`
-2. Open the other mode → set `alwaysApply: false`
+1. Open `.cursor/rules/elastic-open.mdc` and change `alwaysApply: false` to `alwaysApply: true`
+2. Open `.cursor/rules/elastic.mdc` and change `alwaysApply: true` to `alwaysApply: false`
 
-That's it. Both files share the same pattern guides, documentation, and MCP setup — the only difference is the conversation style.
+Both files share the same pattern guides, documentation, and MCP setup — the only difference is the conversation style.
 
 ### Search Pattern Guides
 
