@@ -4,15 +4,24 @@ Use-case-aware developer context for AI-native IDEs. Turns your AI coding assist
 
 ## Two Modes
 
-This repo includes two rule files. **Use one or the other** — pick the mode that matches how you want to work, and delete the other from `.cursor/rules/`.
+This repo includes two rule files. **Guided Mode is active by default.** Both files ship together — no need to delete anything.
 
-### Guided Mode (default)
+### Guided Mode (default — active)
 
 `.cursor/rules/elastic.mdc` — A structured conversational playbook. The AI walks you step by step from intent to working search: asks what you're building, understands your data, recommends an approach, walks through the mapping, and generates production-ready code. Best for developers who are new to Elasticsearch or want an opinionated, end-to-end experience.
 
 ### Open Mode
 
 `.cursor/rules/elastic-open.mdc` — An expert assistant with no prescribed sequence. The AI has the same Elasticsearch knowledge, documentation references, and code standards, but it responds to what you ask rather than driving a flow. Best for developers who already know Elasticsearch and want a knowledgeable pair-programmer, not a guided tour.
+
+### Switching Modes
+
+To switch from Guided to Open (or back), swap which file has `alwaysApply: true` in its frontmatter:
+
+1. Open the mode you want → set `alwaysApply: true`
+2. Open the other mode → set `alwaysApply: false`
+
+That's it. Both files share the same pattern guides, documentation, and MCP setup — the only difference is the conversation style.
 
 ### Search Pattern Guides
 
@@ -30,9 +39,9 @@ Each guide is a complete, tested pattern covering index mapping, ingestion, quer
 ## Setup (Cursor)
 
 1. Copy `.cursor/` into your project root
-2. Delete the mode you don't want from `.cursor/rules/` (keep one)
-3. The rule file loads automatically
-4. Pattern guides are available when the AI detects a matching use case
+2. The Guided Mode rule file loads automatically
+3. Pattern guides are available when the AI detects a matching use case
+4. To use Open Mode instead, see [Switching Modes](#switching-modes) above
 
 ## Getting Started
 

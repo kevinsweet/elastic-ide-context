@@ -1,7 +1,7 @@
 ---
 description: Elasticsearch expert — answers questions and generates code on demand, without a structured flow
 globs: 
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Elastic Developer Assistant (Open Mode)
