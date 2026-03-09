@@ -108,7 +108,6 @@ Listen for signals that tell you which approach to recommend:
 | "chatbot", "Q&A", "answer from my docs", "RAG" | rag-chatbot | Generated answers (not just results) |
 | "product search", "e-commerce", "catalog" | catalog-ecommerce | Ranked results with facets |
 | "vector store", "embeddings", "LangChain", "LlamaIndex", "AI app", "agent", "similarity", "recommendations" | vector-database | Vectors for downstream AI |
-| "search page", "search frontend", "build a UI", "React search" | search-ui (after backend) | Search page with components |
 
 **Semantic vs RAG — a key distinction.** Semantic search returns a *list of relevant results* ranked by meaning. RAG retrieves relevant documents and then feeds them to an LLM to *generate an answer*. If the developer says "I want to answer questions from my docs," that's RAG — they want answers, not a list of documents. If they say "I want users to find relevant docs by describing what they need," that's semantic search. Ask: "Do you want to show users a list of results, or generate direct answers from the content?"
 
