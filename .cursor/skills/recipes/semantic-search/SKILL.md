@@ -285,3 +285,5 @@ Suggest hybrid search when:
 - **Best of both** — Combine BM25 (keyword) and kNN (vector) with RRF for robust relevance.
 
 Direct the developer to the hybrid-search guide or combine `query` + `knn` + `rank` in a single search request.
+
+- **Search UI frontend** — Need to build the search page? Use the search-ui guide. Search UI supports semantic queries via `getQueryFn` — pass a `semantic` query (requires ES 8.15+ and `semantic_text` field) or `knn` query directly into the connector.

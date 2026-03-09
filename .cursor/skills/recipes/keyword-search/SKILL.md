@@ -353,3 +353,5 @@ Suggest hybrid or semantic search when:
 - **Synonyms and paraphrasing** — synonym lists are too large or maintenance-heavy.
 
 Direct the developer to the semantic-search guide for vector search, or to hybrid search (combining keyword + vector with RRF).
+
+- **Search UI frontend** — Need to build the search page? Use the search-ui guide to add a React-based frontend with a search bar, facets, autocomplete, and pagination on top of this index. Connects directly to the Elasticsearch index via the Elasticsearch connector.

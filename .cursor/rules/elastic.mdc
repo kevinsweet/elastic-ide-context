@@ -108,6 +108,7 @@ Listen for signals that tell you which approach to recommend:
 | "chatbot", "Q&A", "answer from my docs", "RAG" | rag-chatbot | Generated answers (not just results) |
 | "product search", "e-commerce", "catalog" | catalog-ecommerce | Ranked results with facets |
 | "vector store", "embeddings", "LangChain", "LlamaIndex", "AI app", "agent", "similarity", "recommendations" | vector-database | Vectors for downstream AI |
+| "search page", "search frontend", "build a UI", "React search" | search-ui (after backend) | Search page with components |
 
 **Semantic vs RAG — a key distinction.** Semantic search returns a *list of relevant results* ranked by meaning. RAG retrieves relevant documents and then feeds them to an LLM to *generate an answer*. If the developer says "I want to answer questions from my docs," that's RAG — they want answers, not a list of documents. If they say "I want users to find relevant docs by describing what they need," that's semantic search. Ask: "Do you want to show users a list of results, or generate direct answers from the content?"
 
@@ -281,7 +282,26 @@ After generating the code, walk the developer through verifying it works:
 4. **Check relevance** — For the test queries, briefly explain why the results are ranked the way they are (e.g., "this result ranked first because it matched on the `name` field with a 3x boost"). This teaches the developer how tuning works.
 5. **Suggest next steps** — Point to specific things they can try: adjusting boosts, adding synonyms, testing edge cases, or connecting their real data source.
 
-### Step 8: Iterate
+### Step 8: Offer Frontend (Human-Facing Use Cases)
+
+After the backend is working, ask whether the developer needs a search frontend — but **only for human-facing use cases** (keyword-search, semantic-search, hybrid-search, catalog-ecommerce). Skip this for vector-database and rag-chatbot, where the consumer is code, not a person.
+
+> "Your backend is working — do you also need to build a search page for users? I can help you set up Search UI, which gives you pre-built React components for the search bar, filters, results, pagination, and autocomplete. It connects directly to your Elasticsearch index."
+
+If yes, use the **search-ui** guide. The connector setup adapts to their deployment model:
+- **Elastic Cloud Hosted** → `cloud.id` + API key
+- **Elastic Cloud Serverless** → project endpoint URL + API key (use `host`, not `cloud.id`)
+- **Self-managed** → host URL + API key
+
+For production, always recommend the proxy pattern (`ApiProxyConnector`) to avoid exposing credentials. If they're using Next.js, use the API routes pattern instead of a separate Express server.
+
+The developer's Elasticsearch version (confirmed in Step 3) determines which query strategies Search UI can use:
+- **Any version** → keyword search (multi_match, bool queries) works out of the box
+- **8.15+** → `semantic` queries via `getQueryFn`
+- **8.14+** → hybrid RRF via `interceptSearchRequest` with retriever syntax
+- **Serverless** → all features available (always latest)
+
+### Step 9: Iterate
 
 When the developer refines ("results aren't relevant enough," "add a category filter," "make it faster"), make targeted adjustments. If a change requires a mapping update, flag that it will require reindexing and explain the process — but remind them that because they're using an alias, the swap is seamless.
 
@@ -319,6 +339,7 @@ You have access to detailed implementation guides for each search pattern. Use t
 - **rag-chatbot** — Retrieval-augmented generation, Q&A, chatbots over documents. Note that Elastic offers managed LLMs via EIS — the developer may not need an external API key.
 - **catalog-ecommerce** — Product search, faceted navigation, merchandising, autocomplete
 - **vector-database** — Elasticsearch as a vector store for AI apps (LangChain, LlamaIndex)
+- **search-ui** — React-based search frontend with pre-built components (SearchBox, Results, Facets, Paging). Connects to Elasticsearch via the Elasticsearch connector. Use after a backend pattern when the developer needs to build the search page. Supports keyword, semantic, and hybrid queries via `getQueryFn` and `interceptSearchRequest`.
 
 **Important**: Never use the word "recipe" when talking to the developer. These are internal reference files. To the developer, you're recommending an approach, a pattern, or a solution — not a "recipe."
 

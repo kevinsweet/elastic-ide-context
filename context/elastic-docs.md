@@ -28,7 +28,12 @@ Use these links and structure when recommending documentation to developers or w
 
 ### Add Search to Your App
 - Client libraries (Python, JavaScript, Java, Go, .NET, PHP, Ruby, Rust)
-- Search UI library
+- [Search UI library](https://www.elastic.co/docs/reference/search-ui) — React-based search frontend components
+  - [Elasticsearch Connector](https://www.elastic.co/docs/reference/search-ui/api-connectors-elasticsearch) — connects directly to ES (Hosted, Serverless, or self-managed)
+  - [Production Usage](https://www.elastic.co/docs/reference/search-ui/tutorials-elasticsearch-production-usage) — proxy pattern for secure deployments
+  - [Next.js Integration](https://www.elastic.co/docs/reference/search-ui/guides-nextjs-integration) — SSR and API routes
+  - [Ecommerce Guides](https://www.elastic.co/docs/reference/search-ui/ecommerce) — search pages, category pages, carousels, autocomplete
+  - [Custom Query Builder](https://www.elastic.co/docs/reference/search-ui/tutorials-elasticsearch-customise-query) — semantic, kNN, and hybrid queries via `getQueryFn`
 
 ## Manage Data (https://www.elastic.co/docs/manage-data)
 

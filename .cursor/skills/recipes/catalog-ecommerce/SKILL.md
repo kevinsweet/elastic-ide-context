@@ -511,3 +511,4 @@ def autocomplete():
 - **Semantic product search** — When "comfortable headphones for running" should match even without exact keyword overlap. Add a vector field using the semantic-search approach.
 - **Hybrid** — Combine keyword + semantic for the best of both. See the hybrid-search guide.
 - **Personalization** — Boost results based on user behavior (clicks, purchases). Requires a signals index and custom scoring.
+- **Search UI frontend** — Need to build the actual search page? Use the search-ui guide to add a React-based frontend with facets, autocomplete, sorting, and pagination on top of this index. Works with the Elasticsearch connector directly — no custom API integration needed.

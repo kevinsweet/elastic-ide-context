@@ -307,3 +307,4 @@ def hybrid_search():
 | **Pure keyword** | All queries are exact (IDs, codes, product SKUs) |
 | **Pure semantic** | All queries are natural language; no need for exact term matches |
 | **RAG** | Developer wants to generate answers from retrieved content, not just return documents |
+**Ready to build the search page?** Use the search-ui guide to add a React frontend. Search UI supports hybrid queries via `getQueryFn` and `interceptSearchRequest` — you can wire RRF directly into the connector.

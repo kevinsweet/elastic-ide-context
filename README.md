@@ -35,6 +35,7 @@ Each guide is a complete, tested pattern covering index mapping, ingestion, quer
 | **rag-chatbot** | Retrieval-augmented generation, Q&A, chatbots over documents |
 | **catalog-ecommerce** | Product search, faceted navigation, merchandising, autocomplete |
 | **vector-database** | Elasticsearch as a vector store for AI apps (LangChain, LlamaIndex) |
+| **search-ui** | React search frontend — search bar, facets, results, autocomplete, pagination |
 
 ## Setup (Cursor)
 
@@ -54,6 +55,7 @@ Open a new Agent chat and describe what you're building. The more specific, the 
 - *"I'm building a RAG pipeline and need a retrieval backend with hybrid search."*
 - *"I need a customer support knowledge base where users can find answers themselves."*
 - *"I want location-based search — find nearby stores, restaurants, or services."*
+- *"I have a working Elasticsearch index and need to build a search page with React."*
 
 The AI will walk you through the right approach for your use case, help you design your index mapping, and generate production-ready code tailored to your data.
 
