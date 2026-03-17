@@ -96,6 +96,28 @@ Three paths. The routing questions from Decision B determine which are available
 
 #### C1: `semantic_text` Mapping
 
+**Minimal — uses default inference endpoint (works out of the box on Serverless):**
+
+```json
+PUT /my-index
+{
+  "mappings": {
+    "properties": {
+      "content": {
+        "type": "semantic_text"
+      },
+      "title": { "type": "text" },
+      "category": { "type": "keyword" },
+      "created_at": { "type": "date" }
+    }
+  }
+}
+```
+
+On Serverless, the default endpoint uses ELSER automatically — no setup needed.
+
+**With a specific model (when B2 or a non-default model is needed):**
+
 ```json
 PUT /my-index
 {
@@ -104,10 +126,7 @@ PUT /my-index
       "content": {
         "type": "semantic_text",
         "inference_id": "my-inference-endpoint"
-      },
-      "title": { "type": "text" },
-      "category": { "type": "keyword" },
-      "created_at": { "type": "date" }
+      }
     }
   }
 }
