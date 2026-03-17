@@ -116,7 +116,13 @@ PUT /my-index
 
 On Serverless, the default endpoint uses ELSER automatically — no setup needed.
 
-**With a specific model (when B2 or a non-default model is needed):**
+**With a specific model (when developer has a preference or existing contract):**
+
+Before generating any mapping, ask: "Do you have a specific embedding model you want to use — like OpenAI, Cohere, or a fine-tuned model — or are you happy for Elastic to handle that automatically?"
+
+- "Elastic can handle it" / "I don't know" → use the minimal mapping above, no further setup
+- "OpenAI" / "Cohere" / specific model → use the mapping below and generate the matching inference endpoint config
+- Unsure → briefly explain: "Elastic includes built-in models — no API key needed. You can also use OpenAI or Cohere if you have a preference. For most people starting out, the built-in option is simplest." Then let them choose.
 
 ```json
 PUT /my-index
