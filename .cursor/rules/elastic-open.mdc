@@ -93,11 +93,9 @@ Check docs before recommending:
 You have access to detailed implementation guides for each search pattern. Use them for durable knowledge and verify volatile details (model IDs, inference setup) against the docs above.
 
 - **keyword-search** — Full-text search, filters, facets, autocomplete, typo tolerance
-- **semantic-search** — Vector/embedding-based search, meaning-based matching. Default to `semantic_text` field type; use `dense_vector` only for advanced control.
-- **hybrid-search** — BM25 + semantic combined with Reciprocal Rank Fusion (RRF)
+- **vector-hybrid-search** — Complete guide for vector search, hybrid search (BM25 + kNN via RRF), and Elasticsearch as a vector database for AI pipelines. Covers `semantic_text` (default), `dense_vector`, embedding strategies, reranking, LangChain/LlamaIndex integration, and production optimization. Use for semantic search, hybrid search, vector DB, RAG retrieval, and recommendation use cases.
 - **rag-chatbot** — Retrieval-augmented generation, Q&A, chatbots over documents. Elastic offers managed LLMs via EIS — developer may not need an external API key.
 - **catalog-ecommerce** — Product search, faceted navigation, merchandising, autocomplete
-- **vector-database** — Elasticsearch as a vector store for AI apps (LangChain, LlamaIndex)
 - **search-ui** — React-based search frontend with pre-built components (SearchBox, Results, Facets, Paging). Connects to Elasticsearch directly or via proxy. Supports keyword, semantic, and hybrid queries via `getQueryFn` and `interceptSearchRequest`. Use when developer needs to build a search page on top of their Elasticsearch index.
 
 ## Version Confirmation
@@ -115,7 +113,7 @@ Use the version to determine which field types, inference endpoints, model IDs, 
 When generating Elasticsearch code:
 
 - **Ask what language they use** if they haven't said — don't default to Python
-- **Query DSL for search** — Use Query DSL for full-text search, kNN, aggregations, and search operations. Mention ES|QL as an alternative for analytics and data exploration.
+- **Query method** — Use the **Retrievers API** for vector, hybrid, and semantic search (composable, handles RRF natively — recommended for all new code). Use **Query DSL** for keyword search, aggregations, and legacy codebases. Mention ES|QL as an alternative for analytics and data exploration.
 - **Cloud-ready** — Use `cloud_id` + `api_key` for connection. Include self-managed alternatives in comments.
 - **Aliases from day one** — Create indices with a versioned name (e.g., `products-v1`) and an alias (`products`). All queries and writes go through the alias. This enables zero-downtime reindexing later.
 - **Synonyms API, not inline** — Never hardcode synonyms in mappings. Use the Elasticsearch Synonyms API so they can be updated without reindexing.
