@@ -144,12 +144,12 @@ PUT _inference/text_embedding/my-inference-endpoint
 {
   "service": "elastic",
   "service_settings": {
-    "model_id": ".multilingual-e5-small"
+    "model_id": "jina-embeddings-v3"
   }
 }
 ```
 
-> Check [EIS models](https://www.elastic.co/docs/explore-analyze/elastic-inference/eis) for current model IDs — they change across releases.
+> Current EIS embedding models: `elser_model_2` (sparse, English), `jina-embeddings-v3` (dense, multilingual), `jina-embeddings-v5-text-small`, `microsoft-multilingual-e5-large`, `openai-text-embedding-3-small`. Full list with availability and rate limits: [EIS models](https://www.elastic.co/docs/explore-analyze/elastic-inference/eis) — model IDs change across releases, always verify before using.
 
 #### C2: `dense_vector` Mapping
 
