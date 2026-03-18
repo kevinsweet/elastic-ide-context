@@ -261,9 +261,7 @@ For ingest pipeline (D1), chunking happens before the inference processor — us
 | Option | Description | When to Use |
 |--------|-------------|-------------|
 | **E1: Bulk API / Client Libraries** | Python, Java, Go, JS, etc. | Most cases — programmatic ingestion from any source |
-| **E2: Elastic Open Web Crawler** | Crawls websites and indexes content | Web content, documentation sites |
-| **E3: Content Connectors** | SharePoint, Confluence, Jira, MongoDB, S3, and more | Pre-built connectors for common sources |
-| **E4: File Upload** | Kibana UI upload | Testing and small datasets only |
+| **E2: File Upload** | Kibana UI upload | Testing and small datasets only |
 
 #### E1: Bulk API (Python)
 
