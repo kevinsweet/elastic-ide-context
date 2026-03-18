@@ -47,6 +47,12 @@ Ask what they're building. Listen for:
 | "recommendations", "similar items", "you might also like" | Vector similarity |
 | "image search", "multimodal" | Dense vector with image embeddings |
 
+**Also ask: how much data?** Listen for scale signals — number of documents, dataset size in GB, or phrases like "millions of records", "large dataset", "production scale", "cost". If the developer indicates large scale (>1M documents, >10GB, cost sensitivity, or production deployment), flag quantization early:
+
+> "With that volume, it's worth choosing your quantization strategy now — it affects your mapping and requires reindexing if you add it later. I'll recommend `int8_hnsw` as the default (about 4x memory reduction with minimal recall impact), but we can discuss options when we get to the mapping step."
+
+This surfaces the decision before it becomes expensive to change. Skip this if the dataset is small or size is unknown — bring it up naturally in Phase 4 instead.
+
 ### Decision A: Deployment Type
 
 Ask which Elasticsearch deployment they're using. This determines scaling (Decision J) and monitoring (Decision K) automatically — don't ask about those separately.
@@ -61,7 +67,7 @@ Ask which Elasticsearch deployment they're using. This determines scaling (Decis
 
 **Ask these routing questions first** — the answers determine which embedding options are valid:
 
-1. "Are you already generating embeddings in your own pipeline?" → Yes → C2/C3 + D2, skip B entirely
+1. "Are you already generating embeddings in your own pipeline?" → Yes → briefly offer: "Just so you know, Elasticsearch can handle embedding automatically via `semantic_text` — no embedding code on your end. Want to see that option, or do you prefer to keep control of the pipeline?" If they want to keep control → C2/C3 + D2, skip B entirely.
 2. "What version of Elasticsearch are you on?" → Below 8.15 → `semantic_text` unavailable, skip C1
 3. "Do you have a specific embedding model you need to use?" → Yes + not supported by inference API → C2 + D2
 
