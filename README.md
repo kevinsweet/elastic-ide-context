@@ -30,11 +30,9 @@ Each guide is a complete, tested pattern covering index mapping, ingestion, quer
 | Pattern | Use Case |
 |---------|----------|
 | **keyword-search** | Full-text search, filters, facets, autocomplete, typo tolerance |
-| **semantic-search** | Vector/embedding-based search, kNN, meaning-based matching |
-| **hybrid-search** | BM25 + kNN combined with Reciprocal Rank Fusion (RRF) |
+| **vector-hybrid-search** | Semantic search, hybrid (BM25 + kNN via RRF), vector store for AI pipelines (LangChain, LlamaIndex), recommendations — covers the full decision tree from embedding strategy through production optimization |
 | **rag-chatbot** | Retrieval-augmented generation, Q&A, chatbots over documents |
 | **catalog-ecommerce** | Product search, faceted navigation, merchandising, autocomplete |
-| **vector-database** | Elasticsearch as a vector store for AI apps (LangChain, LlamaIndex) |
 | **search-ui** | React search frontend — search bar, facets, results, autocomplete, pagination |
 
 ## Setup (Cursor)
