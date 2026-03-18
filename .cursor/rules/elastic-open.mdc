@@ -98,12 +98,21 @@ You have access to detailed implementation guides for each search pattern. Use t
 - **catalog-ecommerce** — Product search, faceted navigation, merchandising, autocomplete
 - **search-ui** — React-based search frontend with pre-built components (SearchBox, Results, Facets, Paging). Connects to Elasticsearch directly or via proxy. Supports keyword, semantic, and hybrid queries via `getQueryFn` and `interceptSearchRequest`. Use when developer needs to build a search page on top of their Elasticsearch index.
 
+## Deployment Context Hint
+
+The rule file may contain a `# deployment:` line injected by the Kibana onboarding UI. If present, use it silently — do not ask about deployment type:
+
+- `# deployment: serverless` → Always latest version. `semantic_text` works out of the box. Scaling and monitoring are automatic.
+- `# deployment: cloud-hosted` → Elastic Cloud Hosted (ECH). Ask version if not determinable via MCP.
+- `# deployment: self-managed` → Self-Managed. Ask version if not determinable via MCP.
+
 ## Version Confirmation
 
 **Before generating any code, confirm the developer's Elasticsearch version.** API syntax, available features, model IDs, and recommended patterns differ across versions — code generated for the wrong version won't work.
 
+- **If `# deployment: serverless` is present**, version is always the latest — skip this question entirely.
 - **If MCP is connected**, detect the version automatically via `GET /` (which returns `version.number`). Mention what you found: "You're on Elasticsearch 8.17 — I'll make sure the code matches."
-- **If the developer is on Serverless**, the version is always the latest. Infer it from context without asking.
+- **If the developer is on Serverless** (inferred from context), the version is always the latest. No question needed.
 - **Otherwise**, ask before generating code: "Quick question — what version of Elasticsearch are you running? You can find it in Kibana under **Stack Management**, or paste the output of `GET /` from **Dev Tools**."
 
 Use the version to determine which field types, inference endpoints, model IDs, and features are available. Link to the version-specific documentation when citing docs.
