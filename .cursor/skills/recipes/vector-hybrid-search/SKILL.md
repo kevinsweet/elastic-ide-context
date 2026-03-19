@@ -75,8 +75,8 @@ If none of those disqualify managed embeddings, present the options:
 
 | Option | Description | When to Use |
 |--------|-------------|-------------|
-| **B1: Built-in Models via EIS** | ELSER (sparse, English) or E5 (dense, multilingual) served by Elastic Inference Service — no ML node cost | Default recommendation for new users on Elastic Cloud (Serverless or ECH) on 8.15+ |
-| **B1b: Built-in Models on ML Nodes** | Same models but served on the developer's own ML nodes | Self-managed deployments (EIS is Cloud-only); or ECH users who need dedicated capacity |
+| **B1: Built-in Models via EIS** | ELSER (sparse, English) or E5 (dense, multilingual) served by Elastic Inference Service — no ML node cost | Default recommendation for Cloud (Serverless or ECH) on 8.15+; also available for self-managed clusters on 9.3+ via Cloud Connect |
+| **B1b: Built-in Models on ML Nodes** | Same models but served on the developer's own ML nodes | Self-managed on <9.3 (EIS unavailable via Cloud Connect); or any deployment where dedicated ML node capacity is preferred |
 | **B2: Third-Party Service** | OpenAI, Cohere, Bedrock, Azure AI, Google AI, Mistral via inference endpoint | When they have an existing model contract or need a specific model |
 | **B3: Self-Hosted Model** | Upload via Eland client, deploy on ML nodes | Advanced — custom fine-tuned models |
 
