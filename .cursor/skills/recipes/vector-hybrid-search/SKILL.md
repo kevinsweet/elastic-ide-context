@@ -597,6 +597,25 @@ Always include pagination — `from`/`size` for basic (up to 10,000 results), `s
 
 ## Phase 4 — Production & Optimization
 
+### Step 4.0: Performance Requirements
+
+Before tuning, establish requirements. Ask only if the developer is on ECH or Self-Managed — skip for Serverless (auto-managed):
+
+- "Roughly how many queries per second do you expect at peak?"
+- "How spiky is your traffic — steady load or bursts?"
+- "Do you have a latency target — e.g., p99 under 100ms?"
+
+Use answers to inform:
+
+| Requirement | Configuration lever |
+|---|---|
+| High QPS | More replicas (each serves queries independently); more shards for large indices |
+| Spiky traffic | Autoscaling deciders on ECH; pre-warm cache after force-merge for cold-start latency |
+| Strict latency | Lower `num_candidates` (faster, less recall); quantization (`int8_hnsw` or `int4_hnsw` = smaller graph = faster traversal); fewer shards for small-medium indices |
+| Max recall | Higher `num_candidates`; `hnsw` (no quantization); exact kNN for small datasets |
+
+**Serverless:** QPS, spikiness, and scaling are automatic — no manual config. The only lever the developer controls is `num_candidates` for the recall/latency tradeoff.
+
 ### Step 4.1: Performance Tuning
 
 **Quantization** — reduces vector memory footprint significantly:
